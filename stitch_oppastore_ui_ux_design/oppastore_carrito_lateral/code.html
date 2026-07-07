@@ -1,0 +1,397 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OppaStore | Skincare &amp; Kawaii Culture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#141e0d",
+                        "surface-tint": "#2f6a3f",
+                        "on-tertiary-fixed-variant": "#514251",
+                        "surface-container-low": "#eef5f7",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-variant": "#dde4e6",
+                        "on-background": "#161d1f",
+                        "surface-container-highest": "#dde4e6",
+                        "inverse-primary": "#96d5a0",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#becbaf",
+                        "tertiary-fixed-dim": "#d6c0d2",
+                        "on-secondary-container": "#5a664f",
+                        "secondary-container": "#d7e4c7",
+                        "inverse-surface": "#2b3234",
+                        "on-tertiary-fixed": "#241724",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#367044",
+                        "outline": "#717970",
+                        "on-primary-fixed": "#00210b",
+                        "tertiary-container": "#f3dcef",
+                        "on-secondary-fixed-variant": "#3f4a35",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f4fafd",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e8eff1",
+                        "surface-dim": "#d4dbdd",
+                        "on-surface": "#161d1f",
+                        "primary-fixed-dim": "#96d5a0",
+                        "secondary-fixed": "#dae7ca",
+                        "on-surface-variant": "#414940",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ebf2f4",
+                        "tertiary": "#6a5969",
+                        "primary-container": "#b2f2bb",
+                        "on-tertiary-container": "#705f6f",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary": "#56624b",
+                        "surface": "#f4fafd",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#145129",
+                        "background": "#f4fafd",
+                        "outline-variant": "#c0c9be",
+                        "tertiary-fixed": "#f3dcef",
+                        "primary": "#2f6a3f",
+                        "primary-fixed": "#b2f2bb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "24px",
+                        "lg": "48px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "xl": "80px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["DM Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["DM Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["DM Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["DM Sans"],
+                        "body-md": ["DM Sans"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["56px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #FCFAF7;
+            scroll-behavior: smooth;
+        }
+        .cart-overlay {
+            background: rgba(22, 29, 31, 0.4);
+            backdrop-filter: blur(4px);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-on-background/80 backdrop-blur-md shadow-sm">
+<nav class="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto">
+<div class="font-display-lg text-headline-md tracking-tight text-primary dark:text-primary-fixed">OppaStore</div>
+<div class="hidden md:flex gap-lg items-center">
+<a class="font-label-lg text-label-lg text-primary dark:text-primary-fixed relative after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-primary after:rounded-full" href="#">Inicio</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Skincare</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Snacks &amp; Comida</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Peluches</a>
+<a class="font-label-lg text-label-lg text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Colecciones</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="favorite">favorite</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors relative" data-icon="shopping_cart" onclick="toggleCart()">
+                    shopping_cart
+                    <span class="absolute -top-2 -right-2 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
+</button>
+<button class="hidden lg:block bg-primary-container text-on-primary-container font-label-lg text-label-lg px-md py-sm rounded-full scale-95 active:scale-90 transition-transform">
+                    Comprar por WhatsApp
+                </button>
+</div>
+</nav>
+</header>
+<!-- SideNavBar (Cart Drawer) -->
+<div class="fixed inset-0 z-[55] cart-overlay opacity-0 pointer-events-none transition-opacity duration-300" id="cart-drawer-overlay" onclick="toggleCart()"></div>
+<aside class="fixed right-0 top-0 h-full w-full max-w-[400px] z-[60] bg-surface dark:bg-inverse-surface rounded-l-lg shadow-2xl translate-x-full transition-transform duration-300 ease-in-out flex flex-col p-md" id="cart-drawer">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Tu Carrito</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">¿Listo para completar tu pedido?</p>
+</div>
+<button class="material-symbols-outlined p-base hover:bg-surface-container-high rounded-full transition-colors" onclick="toggleCart()">close</button>
+</div>
+<!-- Product List -->
+<div class="flex-1 overflow-y-auto space-y-md pr-2">
+<!-- Item 1 -->
+<div class="flex gap-md p-md bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<div class="w-20 h-20 bg-surface-container rounded-md flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A premium high-quality Korean skincare product bottle with minimalist aesthetic, soft pastel background, professional studio lighting, 8k resolution, organic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrim5x4pV-99tn-Ja0oi7BDeooHuBj6gjZr96BYSMPmTV-M4GEm_CZfdWQ_mwfCIYzQnMzLKCgyc0_txWMfdJdXrGxbknllkmI_PZxUMcIhWlXOp9obZwmc-oy1qai5iVzJMMV-UNJVt-bnFwqYap7ysZJlyJBegCTqo-fv1vlxj-izCA8CUhAjpjhbD-6xXHTwaXlPzS_7E6gdRLm7Bs1u6YHuy6pYY8DRf9wlzG725znQQj9UdXF">
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg mb-xs">Peluche Panda Kawaii</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-sm">S/ 45.00</p>
+<div class="flex items-center gap-md">
+<div class="flex items-center border border-outline-variant rounded-full px-sm py-xs">
+<button class="material-symbols-outlined text-[18px]">remove</button>
+<span class="mx-md font-label-md">1</span>
+<button class="material-symbols-outlined text-[18px]">add</button>
+</div>
+<button class="text-error font-label-md text-[12px] hover:underline">Eliminar</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-md p-md bg-surface-container-lowest rounded-lg border border-outline-variant/30">
+<div class="w-20 h-20 bg-surface-container rounded-md flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Authentic Korean snack packaging featuring vibrant colors and cute characters, professional product photography, bright natural lighting, clean composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlunewa24Q8L5cAHTADM1VgyCmcy3zRR8lAuLTCT0pgOnr3OLBazNyuA0ApmOZDpV8D6HwUqlz5OzEkZVerXa0JzyOrhdtrogKe7X5Wz2Z0a7LyC6Zk1Csh-EaD3STdxB-eSZbYNwBLWUEe3x4B00cU6FpuYUf4b5gGS_VyBpaXB0QCYWzLIAyav_nbUUNF9nQ_8GjdGffSSbzfAEszG9MqbW2bPt3uc8uIFa7MZlyVR6qUO9-RYZl">
+</div>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg mb-xs">Snack Coreano Honey Butter</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-sm">S/ 12.00</p>
+<div class="flex items-center gap-md">
+<div class="flex items-center border border-outline-variant rounded-full px-sm py-xs">
+<button class="material-symbols-outlined text-[18px]">remove</button>
+<span class="mx-md font-label-md">2</span>
+<button class="material-symbols-outlined text-[18px]">add</button>
+</div>
+<button class="text-error font-label-md text-[12px] hover:underline">Eliminar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary & CTA -->
+<div class="mt-lg pt-lg border-t border-outline-variant">
+<div class="flex justify-between items-center mb-sm">
+<span class="font-body-md">Subtotal</span>
+<span class="font-body-md">S/ 69.00</span>
+</div>
+<div class="flex justify-between items-center mb-lg">
+<span class="font-headline-sm text-headline-sm">Total</span>
+<span class="font-headline-sm text-headline-sm text-primary">S/ 69.00</span>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-md rounded-full shadow-sm active:scale-[0.98] transition-transform mb-sm flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">send</span>
+                Enviar pedido por WhatsApp
+            </button>
+<p class="text-center font-body-sm text-[12px] text-on-surface-variant italic">
+                Tu pedido se enviará como un mensaje pre-llenado
+            </p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="mt-20 px-gutter max-w-container-max mx-auto py-xl">
+<!-- Hero Section -->
+<section class="relative mb-xl overflow-hidden bg-surface-container-low rounded-xl p-lg min-h-[600px] flex items-center">
+<div class="z-10 max-w-xl">
+<h1 class="font-display-lg text-display-lg mb-md leading-tight text-on-background">Skincare for Everyone</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg max-w-md">
+                    A mild blend of fresh mint, warming herbs, smooth honey, and sparkling citrus. Experiencia coreana en el corazón de Ayacucho.
+                </p>
+<button class="bg-primary-fixed text-on-primary-fixed font-label-lg text-label-lg px-xl py-md rounded-full shadow-lg hover:shadow-xl transition-all">
+                    Shop Now
+                </button>
+</div>
+<!-- Hero Floating Assets -->
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block">
+<div class="relative w-full h-full">
+<img class="absolute top-10 right-10 w-[300px] object-contain drop-shadow-2xl" data-alt="A collection of luxury Korean skincare products in mint and white packaging, floating elegantly in mid-air against a soft cream background, minimalist studio aesthetic, gentle shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFmaKYecuLl4FrS-oBCeTfijyPFY2yPV1QDQal69prSt-ttw_2lbGlHsRpNCZ9G9ObgiRTyeVfYAOn5zHkQp8FUpmLuSlqY9rN_l2-SdvaeMgPTge6nqR_fE7cWBrPmzQYQq2o4sGxgMs89dd8HAE1PkTBCxa-gTNtfMKO5azx4rx5LOWQfSrMTYRwq3s-ou0aIfQRrNh7hZ2tn_CnmOmE2S6_wcHUNYWktj6WN2gj2uYe7Sx8lMNL">
+<img class="absolute bottom-10 left-10 w-[200px] object-contain drop-shadow-xl rotate-12" data-alt="Fresh organic aloe vera leaves sliced to show the clear cooling gel, vibrant green colors, high-end skincare ingredient photography, bright and airy lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJvzQf64VxOK8HC1i0TNFf5AaOT1QBxDR1C5edPS3AGpjFuAefI2hIcQRk7ndvHvB7pncU_XDu0q71UhAjKCAaZS7e80av4LUPvl7i40bCLZ25_pFmy9RH0vTi4cNWJ6SQVci8-2TPGPdMpr_yfkMOFrArvvcVJV2uDze82ypDcbGxy9dpoBiGA4eoqRMovDiaGiBuV5ku6OGonPnchBm6wMNEtAd8Sy5eXcrj5j7fUQvnMGLb0Y3G">
+</div>
+</div>
+</section>
+<!-- Category Section (Bento Inspired) -->
+<section class="mb-xl">
+<div class="flex justify-between items-end mb-lg">
+<h2 class="font-headline-lg text-headline-lg">Reinvent your skin today</h2>
+<a class="text-primary font-label-lg underline underline-offset-8" href="#">Explore All</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-md">
+<!-- Cat Cards -->
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Beautifully composed circular image of a facial serum bottle on a textured stone surface, soft pink and white tones, high-end spa aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMTkOi3wM7fXnLGs5jD9vVgjo-f19wATK7SvKA_8-LkcD2ZnnqU2-uTjCFKyW290hVBKC9f4C_L7IgLPWtBiF_Wckar1_WWoT2FJ9mfHp_Mk_aAHBkggutPAe6jI9yF9JgLib_nLCv7OlID8VTG8Izu0vunkbO5xPTipYhFqGSveQyejX0KlOrnSbeJswxZV0CE9Yi7qmweVqsTValOhgdMZZs0UFsj8TjLSYTWm9NUeDANDgAj9GI">
+</div>
+<span class="font-label-lg text-label-lg">Skin Care</span>
+</div>
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Macro shot of luxurious body cream being applied to skin, soft lighting, warm tones, focus on texture and hydration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3oamfstDeCssysIiD4UJ5u4XY0czQoNxJMOU75HWzJVUSjX6pJPFKje_s-ftON0JT_J-ZJ1V4U3PTWMTqdgJkvuoSHVjCWT9a6ydyP6YR71mVx1rC4p1yIx-YiIONMvXBM8dIH2CMgwPAWW8LVtH2JjlQM6eBlo3KnkjivvFL_2qg6lYj2du-Azk0TZGRoCl3zCy77F6RhIPLO7DT0pj_qxQnN12jm_u5VlwaYYTXz5dSBNMuWxfF">
+</div>
+<span class="font-label-lg text-label-lg">Body</span>
+</div>
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Close up of a premium lipstick with a rich red color, elegant black gold packaging, professional makeup photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFIoRgFkeQflgebkQxsmD8ZPyrYaT0xIW5EguxMbMwpD_iIXnn23kyoQvRZ1m_sXtoDmnPR0CLDTt_qcvzXbVEfsDj1eqBtwdBVICrfpIf29c3_tYyl0CB5zN_cYNYBqK-OU6tLonvs4VvdVcACuhozwCEzDuyWcJnzeTobhIXeXfSnygF6BU0frMtXgtZduFVNpDzCxNS55Zh0YBFmFs_pZ-7alavAek83DCH-ocpFpL9jfyPnoU1">
+</div>
+<span class="font-label-lg text-label-lg">Makeup</span>
+</div>
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Elegant perfume bottle in an orange glass, captured in soft morning light with natural plant shadows in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAxmjGeyQW9IMQH5H6YlI4DA7Gys_ePb9I067pHrHXhOC6i5EPZErBq11lyjkczgsN6U6KGHDPgISBglwmR4rjTFWF-ehxZpiXYdZ2cCVXj1EE4gYYXZ394iI8Z0XgW-Twy0fz-oSU_WTAyCLG75o_U31QKmOXbnkbiZ7IcuEEJnsFrLKnybT_Py35KDbEmtLpFZs3_8c5v3MVCCW73spHTT0MeeEIZVPWGBOwJ6R6KjAZRbUSn0U2">
+</div>
+<span class="font-label-lg text-label-lg">Fragrance</span>
+</div>
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Minimalist dark glass serum bottle with dropper, placed on a dark reflective surface, cinematic lighting, premium skincare vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJKSTmMvfzqRwsvCGkAdV_f0r8RAQVV4tehCVffVrKIbDoKYkqw4iRDpMi0LAdtLwfH87iKnZ5xBTaRA9cqowTxEr5guMPitwewAbVEEjvdAU-_x1Rwet0QlHnmrV5CxmNFIekg1hDFgN1WZAAe166_KNlVza3QrtAm9Ek20VRE86kezqSoeLGoas9BYbus-2MEet0OlI8-dTlhDhVdw9PUqlZptmACsYJLB1U9J0k_m6zYnvPj_N1">
+</div>
+<span class="font-label-lg text-label-lg">Serum</span>
+</div>
+<div class="flex flex-col items-center gap-sm group cursor-pointer">
+<div class="w-full aspect-square rounded-full overflow-hidden bg-surface-container-high group-hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="Selection of organic skin balms and natural ingredients like stones and leaves, zen aesthetic, clean flat lay photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0YFu7hu4SLT_uweHuZXO0PgeH9fx86xlq6N2ISf8pw-2zKJ2XD0fHlsP09QpixlLLQjrEuzXlhwsn6_JBDdikTVroofcJYyY_trilb9_q9B4u0i1aD62tIPi3vTkVJ_xFhsH5yxDmfuCMiUI7fARWuL2zjYVq8ZyEtP0z4fPxDkY71VGhD7vlJswLMAvkejDHDxckbVsxUI6DMTjnZHRkGQKB4ph_qdnSIUZzVDlztfVmS17pJRuD">
+</div>
+<span class="font-label-lg text-label-lg">Balms</span>
+</div>
+</div>
+</section>
+<!-- Product Grid -->
+<section>
+<div class="flex justify-between items-center mb-lg">
+<h2 class="font-headline-lg text-headline-lg">Most Popular</h2>
+<button class="bg-primary text-white font-label-lg text-label-lg px-md py-sm rounded-full">View All Items</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Product Card 1 -->
+<div class="group relative bg-surface-container-lowest p-md rounded-lg shadow-sm hover:shadow-lg transition-all border border-outline-variant/20">
+<div class="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden mb-md">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Cetaphil gentle skin cleanser bottle on a soft peach background, minimalist commercial product shot, bright studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlG_9Yt-zxgmedzHN14lWDrHXrzIa7oRRuRI_SjYE4sqTu-7YxKHzdvEjTyjPgmCJYdSTHfDeH4dfE73lji8oO9QA3xj4RyYFE1QROLgIj3Cq1xvkJ70gElrgDfT9V6APxs367PELIVAphLihvHWeSrbcFoVd_UfLmHLv4B3jA08Cr_8oxWY_tlYWuXinMR2O5PGz6Z3fw3yhWefCQGFuFbbzgEV0cmB7aNblIAmKxnE7h5UPBq13D">
+<div class="absolute top-sm left-sm bg-white px-base py-xs rounded-full font-label-md text-[10px] shadow-sm">New</div>
+</div>
+<h3 class="font-label-lg text-label-lg mb-xs">Cetaphil Gentle Skin Cleanser</h3>
+<p class="font-body-md text-primary font-bold">S/ 89.00</p>
+</div>
+<!-- Product Card 2 -->
+<div class="group relative bg-surface-container-lowest p-md rounded-lg shadow-sm hover:shadow-lg transition-all border border-outline-variant/20">
+<div class="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden mb-md">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Pink organic skincare bottle focused on the center, pastel aesthetic, soft-focus background with subtle floral hints, professional retail shot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-2J-4Nenzn9Ktt2y7nbT3c_ozlSWg-bPdgjnFyfEQBFEHvwm8JvBZS7M4eT4ac41KHImjUED_tZaXV4k_UlzCBEUFZgETT5bzPH_gtNbBH-8PWZQyjZ5GRdOKRjl0yf0Sd3fJADkX6pYk2S9kQfNpPo9WtwP-kyWUqOjT2s39Z4TcuISn5Ec9o5aQxYhhcOwGIEJp73VoORSd4UA1vmCxwhb4LSZftlxHjz_49rBQuZCPEDLn0OPW">
+<div class="absolute top-sm left-sm flex gap-xs">
+<span class="bg-white px-base py-xs rounded-full font-label-md text-[10px] shadow-sm">New</span>
+<span class="bg-primary-container text-on-primary-container px-base py-xs rounded-full font-label-md text-[10px] shadow-sm">Sale</span>
+</div>
+</div>
+<h3 class="font-label-lg text-label-lg mb-xs">Organcy Moisturizing Lotion</h3>
+<p class="font-body-md text-primary font-bold">S/ 65.00</p>
+</div>
+<!-- Product Card 3 -->
+<div class="group relative bg-surface-container-lowest p-md rounded-lg shadow-sm hover:shadow-lg transition-all border border-outline-variant/20">
+<div class="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden mb-md">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Premium gray serum bottle with minimalist text, studio light casting soft shadows, elegant and modern skin health product photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArmPCsNbU0ezVIxZL90aMLea8diNO--ZbYej4o2D5QrHFUubGGKKwdpE9RpbSE7Y8EZQjtWueiaeyFfFTX7AQ2aSlpFbR9wn9avPHtYCGL4BABATsaw7QpEUsrLcSjDlBIcqso6XtSO32afBRFY9dCeNZUicLZ_p6bZR-OKXyYNJwRvU0fQs7NWWQ0ZmTl0lX9tw1q28aTjr2YqerrI_YZH-ViHp9vCs_hMN4rPSV_6AsY5Drz1SjS">
+<div class="absolute bottom-sm left-1/2 -translate-x-1/2 w-[80%] opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-full bg-white text-on-surface font-label-md py-xs rounded-full shadow-md text-[12px]">Quick View</button>
+</div>
+</div>
+<h3 class="font-label-lg text-label-lg mb-xs">Vitamin C Revive Serum</h3>
+<p class="font-body-md text-primary font-bold">S/ 120.00</p>
+</div>
+<!-- Product Card 4 -->
+<div class="group relative bg-surface-container-lowest p-md rounded-lg shadow-sm hover:shadow-lg transition-all border border-outline-variant/20">
+<div class="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden mb-md">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Warm yellow skincare bottle focused against a clean minimalist room background, morning sunlight creating natural leaf shadows, professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMgNFqUCzXaUrcVmKcHhaUXJURF59VMm3mOWVJYKs46P6C0xdDWm3az742SdW3nizAWC3AhjXuyyT6kqkT-9QpWEAPE68bQ8EqwwyQgiI1cPLTaOGy4rPvm3lYo7gTBul98BhDSSak2zBpGFtmX00LtvD1EH1xFkUmqiXDgJcU8VHF3_2s1fvCrkk1CBQp4IP1NbV7O8_BynqJgp_SmtY_wmv1q7Xfj1bUizGrG3PreO3yRq_t6WwS">
+</div>
+<h3 class="font-label-lg text-label-lg mb-xs">Honey Infused Toner</h3>
+<p class="font-body-md text-primary font-bold">S/ 55.00</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-on-background w-full mt-xl border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg px-gutter py-xl max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-md text-primary mb-4">OppaStore</div>
+<p class="font-body-md text-on-surface-variant mb-md">
+                    Llevando lo mejor de la cultura coreana y el skincare premium a Ayacucho y todo el Perú.
+                </p>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer">public</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">favorite</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">share</span>
+</div>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg mb-md">Explora</h4>
+<ul class="space-y-sm">
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Catálogo</a></li>
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Drops</a></li>
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Novedades</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg mb-md">Ayuda</h4>
+<ul class="space-y-sm">
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Preguntas Frecuentes</a></li>
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Envíos</a></li>
+<li class=""><a class="font-body-md text-on-surface-variant hover:text-surface-tint hover:underline transition-all" href="#">Políticas de Privacidad</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg mb-md">Newsletter</h4>
+<p class="font-body-sm text-on-surface-variant mb-md">Únete para recibir ofertas exclusivas.</p>
+<div class="flex gap-xs">
+<input class="bg-surface border-none rounded-full px-md flex-1 text-sm focus:ring-2 focus:ring-primary-fixed" placeholder="Tu email" type="email">
+<button class="bg-primary text-white p-base rounded-full material-symbols-outlined">arrow_forward</button>
+</div>
+</div>
+</div>
+<div class="text-center py-lg border-t border-outline-variant font-body-sm text-on-surface-variant">
+            © 2024 OppaStore. Inspiración coreana en Ayacucho.
+        </div>
+</footer>
+<script>
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+
+
+</body></html>
