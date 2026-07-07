@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ShoppingCart, Heart, Check } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Producto } from "@/domain/types";
@@ -76,11 +77,20 @@ export function ProductCard({ producto, onAgregar, onFavorito, esFavorito }: Pro
             className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.06]"
           />
         )}
+
+        {/* Enlace al detalle sobre la imagen; los botones (z-10) quedan por encima. */}
+        <Link
+          href={`/producto/${producto.slug}`}
+          aria-label={`Ver ${producto.nombre}`}
+          className="absolute inset-0 z-[1]"
+        />
       </div>
 
       <div className="flex flex-1 flex-col">
         <h3 className="font-body text-[13px] font-bold leading-snug text-on-surface transition-colors group-hover:text-primary sm:text-label-lg">
-          {producto.nombre}
+          <Link href={`/producto/${producto.slug}`} className="outline-none focus-visible:underline">
+            {producto.nombre}
+          </Link>
         </h3>
         <p className="mt-xs line-clamp-2 text-[12px] text-on-surface-variant sm:text-body-sm">
           {producto.descripcion}

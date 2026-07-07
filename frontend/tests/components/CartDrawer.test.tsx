@@ -33,12 +33,12 @@ function Harness({ inicial }: { inicial: ItemCarrito[] }) {
       onIncrementar={(i) => setItems((prev) => actualizarCantidad(prev, i.producto.id, i.cantidad + 1))}
       onDecrementar={(i) => setItems((prev) => actualizarCantidad(prev, i.producto.id, i.cantidad - 1))}
       onEliminar={(i) => setItems((prev) => eliminarItem(prev, i.producto.id))}
-      onEnviar={vi.fn()}
+      onContinuar={vi.fn()}
     />
   );
 }
 
-describe("CartDrawer (RF22–RF26)", () => {
+describe("CartDrawer (RF22–RF27)", () => {
   it("CP07 · el total se actualiza al aumentar la cantidad (RB04, RB05)", async () => {
     const p = producto({ id: "a", nombre: "Tónico", precio: 65, stock: 10 });
     render(<Harness inicial={[{ producto: p, cantidad: 1 }]} />);
@@ -72,8 +72,8 @@ describe("CartDrawer (RF22–RF26)", () => {
     expect(screen.getByText(/tu carrito está vacío/i)).toBeInTheDocument();
   });
 
-  it("CP09 · 'Enviar pedido por WhatsApp' dispara el envío (RB06)", async () => {
-    const onEnviar = vi.fn();
+  it("CP09 · 'Continuar' avanza al paso de datos del cliente (RF27)", async () => {
+    const onContinuar = vi.fn();
     const p = producto({ id: "a", nombre: "Tónico", precio: 65, stock: 5 });
     render(
       <CartDrawer
@@ -83,10 +83,30 @@ describe("CartDrawer (RF22–RF26)", () => {
         onIncrementar={vi.fn()}
         onDecrementar={vi.fn()}
         onEliminar={vi.fn()}
-        onEnviar={onEnviar}
+        onContinuar={onContinuar}
       />,
     );
-    await userEvent.click(screen.getByRole("button", { name: /enviar pedido por whatsapp/i }));
-    expect(onEnviar).toHaveBeenCalledOnce();
+    await userEvent.click(screen.getByRole("button", { name: /continuar/i }));
+    expect(onContinuar).toHaveBeenCalledOnce();
+  });
+
+  it("renderiza el formulario de checkout en el paso 'datos'", () => {
+    const p = producto({ id: "a", nombre: "Tónico", stock: 5 });
+    render(
+      <CartDrawer
+        abierto
+        paso="datos"
+        items={[{ producto: p, cantidad: 1 }]}
+        onCerrar={vi.fn()}
+        onIncrementar={vi.fn()}
+        onDecrementar={vi.fn()}
+        onEliminar={vi.fn()}
+        onContinuar={vi.fn()}
+        onVolver={vi.fn()}
+        checkout={<div>Formulario de datos</div>}
+      />,
+    );
+    expect(screen.getByText("Formulario de datos")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /volver al carrito/i })).toBeInTheDocument();
   });
 });

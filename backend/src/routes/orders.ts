@@ -5,15 +5,50 @@ import { formatearSoles, redondear2 } from "../lib/money";
 
 export const ordersRouter = Router();
 
-const ordenSchema = z.object({
-  nombre: z.string().min(1, "El nombre es obligatorio"),
-  distrito: z.string().min(1, "El distrito es obligatorio"),
-  metodoEntrega: z.enum(["recojo", "delivery"]),
-  usuarioId: z.string().uuid().optional(),
-  items: z
-    .array(z.object({ productoId: z.string(), cantidad: z.number().int().positive() }))
-    .min(1, "El carrito no puede estar vacío"),
-});
+const ordenSchema = z
+  .object({
+    nombre: z.string().min(1, "El nombre es obligatorio"),
+    provincia: z.string().optional().default(""),
+    distrito: z.string().optional().default(""),
+    direccionEntrega: z.string().optional().default(""),
+    metodoEntrega: z.enum(["recojo", "delivery"]),
+    usuarioId: z.string().uuid().optional(),
+    items: z
+      .array(z.object({ productoId: z.string(), cantidad: z.number().int().positive() }))
+      .min(1, "El carrito no puede estar vacío"),
+  })
+  .superRefine((datos, ctx) => {
+    if (datos.metodoEntrega === "delivery") {
+      if (datos.provincia.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["provincia"],
+          message: "La provincia es obligatoria para delivery",
+        });
+      }
+      if (datos.distrito.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["distrito"],
+          message: "El distrito es obligatorio para delivery",
+        });
+      }
+      if (datos.direccionEntrega.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["direccionEntrega"],
+          message: "La dirección o agencia es obligatoria para delivery",
+        });
+      }
+    }
+  })
+  .transform((datos) => ({
+    ...datos,
+    nombre: datos.nombre.trim(),
+    provincia: datos.metodoEntrega === "recojo" ? "" : datos.provincia.trim(),
+    distrito: datos.metodoEntrega === "recojo" ? "Recojo en tienda" : datos.distrito.trim(),
+    direccionEntrega: datos.metodoEntrega === "recojo" ? "" : datos.direccionEntrega.trim(),
+  }));
 
 /**
  * POST /api/v1/orders — registra el pedido y devuelve el mensaje de WhatsApp.
@@ -60,7 +95,7 @@ ordersRouter.post("/", async (req, res, next) => {
       data: {
         usuarioId: datos.usuarioId,
         nombreCliente: datos.nombre,
-        distrito: datos.distrito,
+        distrito: datos.metodoEntrega === "delivery" ? `${datos.provincia} / ${datos.distrito}` : datos.distrito,
         metodoEntrega: datos.metodoEntrega,
         total,
         mensajeWhatsapp: mensaje,
@@ -96,7 +131,13 @@ function construirMensaje(
     `Total aproximado: ${formatearSoles(total)}`,
     "",
     `Mi nombre: ${datos.nombre}`,
-    `Mi distrito/zona: ${datos.distrito}`,
-    `Método de entrega: ${datos.metodoEntrega}`,
+    ...(datos.metodoEntrega === "delivery"
+      ? [
+          `Provincia / ciudad: ${datos.provincia}`,
+          `Distrito: ${datos.distrito}`,
+          `Dirección o agencia: ${datos.direccionEntrega}`,
+        ]
+      : []),
+    `Método de entrega: ${datos.metodoEntrega === "delivery" ? "delivery nacional" : datos.metodoEntrega}`,
   ].join("\n");
 }

@@ -17,7 +17,9 @@ const items: ItemCarrito[] = [
 describe("mensaje de WhatsApp (RB06, RB16, RB18)", () => {
   const mensaje = construirMensaje(items, {
     nombre: "Ana",
-    distrito: "Huamanga",
+    provincia: "Ayacucho",
+    distrito: "Jesús Nazareno",
+    direccionEntrega: "Agencia Shalom Ayacucho",
     metodoEntrega: "delivery",
   });
 
@@ -31,10 +33,24 @@ describe("mensaje de WhatsApp (RB06, RB16, RB18)", () => {
     expect(mensaje).toContain("Total aproximado: S/ 173.00");
   });
 
-  it("CP09 · incluye nombre, distrito y método de entrega (RB16)", () => {
+  it("CP09 · incluye nombre, destino nacional y método cuando es delivery (RB16)", () => {
     expect(mensaje).toContain("Mi nombre: Ana");
-    expect(mensaje).toContain("Mi distrito/zona: Huamanga");
-    expect(mensaje).toContain("Método de entrega: delivery");
+    expect(mensaje).toContain("Provincia / ciudad: Ayacucho");
+    expect(mensaje).toContain("Distrito: Jesús Nazareno");
+    expect(mensaje).toContain("Dirección o agencia: Agencia Shalom Ayacucho");
+    expect(mensaje).toContain("Método de entrega: delivery nacional");
+  });
+
+  it("omite distrito cuando el método es recojo en tienda", () => {
+    const recojo = construirMensaje(items, {
+      nombre: "Ana",
+      distrito: "Recojo en tienda",
+      metodoEntrega: "recojo",
+    });
+    expect(recojo).toContain("Mi nombre: Ana");
+    expect(recojo).toContain("Método de entrega: recojo");
+    expect(recojo).not.toContain("Provincia / ciudad:");
+    expect(recojo).not.toContain("Dirección o agencia:");
   });
 
   it("CP15 · genera un enlace wa.me con el texto codificado (RF29)", () => {
@@ -50,7 +66,9 @@ describe("mensaje de WhatsApp (RB06, RB16, RB18)", () => {
   it("sin datos del cliente deja los campos en blanco (mensaje borrador)", () => {
     const borrador = construirMensaje(items);
     expect(borrador).toContain("Mi nombre: ");
-    expect(borrador).toContain("Mi distrito/zona: ");
+    expect(borrador).toContain("Provincia / ciudad: ");
+    expect(borrador).toContain("Distrito: ");
+    expect(borrador).toContain("Dirección o agencia: ");
     expect(borrador).toContain("Método de entrega: recojo / delivery");
     expect(borrador).toContain("Total aproximado: S/ 173.00");
   });

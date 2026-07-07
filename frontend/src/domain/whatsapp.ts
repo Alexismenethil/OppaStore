@@ -1,7 +1,7 @@
 /**
  * Generación del pedido por WhatsApp.
  *  - RB06: mensaje con TODOS los productos del carrito.
- *  - RB16: incluye nombre, distrito/zona y método de entrega.
+ *  - RB16: incluye nombre, método de entrega y destino nacional solo cuando hay delivery.
  *  - RB18: montos en formato "S/ X.XX".
  *  - RF29: enlace wa.me con el texto prellenado.
  * No hay pasarela de pagos (RB11): el flujo termina aquí, en WhatsApp (RB12).
@@ -12,7 +12,7 @@ import { subtotalItem, totalCarrito } from "./cart";
 
 const ETIQUETA_ENTREGA: Record<DatosCliente["metodoEntrega"], string> = {
   recojo: "recojo",
-  delivery: "delivery",
+  delivery: "delivery nacional",
 };
 
 /**
@@ -28,6 +28,16 @@ export function construirMensaje(items: ItemCarrito[], datos?: Partial<DatosClie
   });
 
   const entrega = datos?.metodoEntrega ? ETIQUETA_ENTREGA[datos.metodoEntrega] : "recojo / delivery";
+  const lineasDestino =
+    datos?.metodoEntrega === "recojo"
+      ? []
+      : [
+          `Provincia / ciudad: ${datos?.provincia ?? ""}`,
+          `Distrito: ${datos?.distrito ?? ""}`,
+          `Dirección o agencia: ${datos?.direccionEntrega ?? ""}`,
+        ];
+
+  const lineasCliente = [`Mi nombre: ${datos?.nombre ?? ""}`, ...lineasDestino, `Método de entrega: ${entrega}`];
 
   return [
     "Hola OppaStore 💚 Quiero realizar este pedido:",
@@ -36,9 +46,7 @@ export function construirMensaje(items: ItemCarrito[], datos?: Partial<DatosClie
     "",
     `Total aproximado: ${formatearSoles(totalCarrito(items))}`,
     "",
-    `Mi nombre: ${datos?.nombre ?? ""}`,
-    `Mi distrito/zona: ${datos?.distrito ?? ""}`,
-    `Método de entrega: ${entrega}`,
+    ...lineasCliente,
   ].join("\n");
 }
 

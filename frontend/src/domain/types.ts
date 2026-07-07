@@ -43,6 +43,8 @@ export interface Producto {
   fechaVencimiento?: string;
   infoAdicional?: InfoAdicional;
   imagenUrl?: string;
+  /** Galería opcional para el detalle; `imagenUrl` sigue siendo la portada. */
+  imagenes?: string[];
   destacado?: boolean;
 }
 
@@ -53,6 +55,8 @@ export interface ItemCarrito {
 
 export interface DatosCliente {
   nombre: string;
+  provincia?: string;
   distrito: string;
+  direccionEntrega?: string;
   metodoEntrega: MetodoEntrega;
 }

@@ -14,6 +14,13 @@ export const CATEGORIAS = [
   { slug: "drops", nombre: "Drops" },
 ] as const;
 
+const IMAGENES_KBEAUTY_BOX = [
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCoUZV3kkKn9om6dkxzKlVQnk3GHhzdbclnds9aokrjGxGHcy2pPFoEb8T5HgBd9T9KAKmduDpmvX3TSDHVZV_oeDP3JWodQ1RJjZ7PsJlh8hiSmcmyLuGtymaIf59rFi_GkmWsMsbhxHLXbDHBRxlI-TEWItt9i29p3ey0dOlCOSkFUq0quVBCu4-QRtqaROjCu-dxyphpJE7i4m4kmd6M9930SAIF2zeQ_81n-kWFfVNjp1wAYUxY",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBpK-yxkWYj88X5dlhBSlGKQUmx6SGaRU0Dvz63s7GYMDepWIe2iKIENoVSTMO9yDyOPclX-yKsWhAP9OpS0S5JfH7h1ikGkHD8DnCY5HbQpyS6Mq__23l89AFlsCsHs8nwnBfZgv0zhr3V4B4-L8eLAefsMTxsdTuTS_jKn07kHDI54hZhmYkT3Bce8cZKhgr0vskZ6X8g8zjYyFadogJr_w52dEBwblMRZfNde_exUZSi47px05SD",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCqu_uQY3wPTJ1mpSBrK7lB1jbydgvbMCfkJ__Us9gmuLy0UifUrk83Rg5Rk6I9yp1736l8dwSAKTF-10l7sA3bB2336a2XxUZQezzdGAGIZAxjyIqUrDwdsbseiMAqAerDIdkQmpF7Dbt9EVG7BY_Q7TEdfj4T75IhC5VzFQywb0414pLYxbqwOId_Ffn4vjBg5vDnsjUiw79WZa2HsDIShCDM93C6szZYC6Dbvx1OUWekVPQvFiCL",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBoIw99HH7IKOwhJsBbnXU8mvQfvVLvwxHpnjLX6w_QfwrxUjX7fELNxBJubA50otie3Uu2sjDZIrIDRLZGRtoRNVjiRDrCZchTiAkqxQrd45u76YL5xl6Aypr5HV1DRnTBL9DiEy48xu7-VnGsGiD3bZrMbnHoPQ8V_Jlz7ku6WgFn8Y6w3FL42T2meWm-ulmXKdfHJirRsyyHRVFIm7PeisKo6hzQ92_naImVIh90XPNlfe5QEnrs",
+] as const;
+
 export const PRODUCTOS: Producto[] = [
   {
     id: "p1",
@@ -149,8 +156,8 @@ export const PRODUCTOS: Producto[] = [
     tipo: "coleccion",
     activo: true,
     esPreventa: false,
-    imagenUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCoUZV3kkKn9om6dkxzKlVQnk3GHhzdbclnds9aokrjGxGHcy2pPFoEb8T5HgBd9T9KAKmduDpmvX3TSDHVZV_oeDP3JWodQ1RJjZ7PsJlh8hiSmcmyLuGtymaIf59rFi_GkmWsMsbhxHLXbDHBRxlI-TEWItt9i29p3ey0dOlCOSkFUq0quVBCu4-QRtqaROjCu-dxyphpJE7i4m4kmd6M9930SAIF2zeQ_81n-kWFfVNjp1wAYUxY",
+    imagenUrl: IMAGENES_KBEAUTY_BOX[0],
+    imagenes: [...IMAGENES_KBEAUTY_BOX],
   },
   {
     id: "p9",

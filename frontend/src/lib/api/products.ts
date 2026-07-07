@@ -16,6 +16,7 @@ interface ApiProducto {
   fechaVencimiento: string | null;
   infoAdicional: Producto["infoAdicional"] | null;
   imagenUrl: string | null;
+  imagenes?: string[] | null;
   destacado: boolean;
   categoria?: { slug: string; nombre: string };
 }
@@ -37,6 +38,7 @@ export function mapProducto(api: ApiProducto): Producto {
     fechaVencimiento: api.fechaVencimiento ?? undefined,
     infoAdicional: api.infoAdicional ?? undefined,
     imagenUrl: api.imagenUrl ?? undefined,
+    imagenes: api.imagenes?.filter(Boolean) ?? undefined,
     destacado: api.destacado,
   };
 }
