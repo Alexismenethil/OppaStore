@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: oppastore-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: oppastore
+      POSTGRES_PASSWORD: oppastore
+      POSTGRES_DB: oppastore
+    ports:
+      - "5432:5432"
+    volumes:
+      - oppastore_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oppastore -d oppastore"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  oppastore_pgdata:
