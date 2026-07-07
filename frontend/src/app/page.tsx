@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ProductCard } from "@/components/ProductCard";
-import { PRODUCTOS, CATEGORIAS } from "@/data/products.seed";
+import { ProductGrid } from "@/components/ProductGrid";
+import { useProductos } from "@/features/catalog/useProductos";
+import { CATEGORIAS } from "@/data/products.seed";
 import type { ItemCarrito, Producto } from "@/domain/types";
 import { agregarAlCarrito, contarItems } from "@/domain/cart";
 import { alternarFavorito } from "@/domain/favorites";
@@ -17,13 +19,21 @@ const PASOS = [
   { n: 3, titulo: "Pide por WhatsApp", texto: "Coordinamos el pago (Yape/Plin/Efectivo) y la entrega." },
 ];
 
+const contenedor = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } },
+};
+const aparece = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+};
+
 export default function HomePage() {
+  const { productos } = useProductos();
   const [items, setItems] = useState<ItemCarrito[]>([]);
   const [favoritos, setFavoritos] = useState<string[]>([]);
 
-  // Solo productos activos en el catálogo público (RB10).
-  const activos = PRODUCTOS.filter((p) => p.activo);
-  const destacados = activos.filter((p) => p.destacado);
+  const destacados = productos.filter((p) => p.destacado).slice(0, 4);
 
   const agregar = (p: Producto) => setItems((prev) => agregarAlCarrito(prev, p, 1));
   const favorito = (p: Producto) => setFavoritos((prev) => alternarFavorito(prev, p.id));
@@ -36,72 +46,106 @@ export default function HomePage() {
         {/* Hero */}
         <section className="relative flex min-h-[80vh] items-center overflow-hidden px-gutter">
           <div className="animate-float absolute -right-20 -top-20 -z-10 h-[500px] w-[500px] organic-shape-1 bg-primary-container/20" />
-          <div className="animate-float absolute -left-20 top-1/2 -z-10 h-[360px] w-[360px] organic-shape-2 bg-secondary-container/30" />
+          <div
+            className="animate-float absolute -left-20 top-1/2 -z-10 h-[360px] w-[360px] organic-shape-2 bg-secondary-container/30"
+            style={{ animationDelay: "-2s" }}
+          />
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            variants={contenedor}
+            initial="hidden"
+            animate="visible"
             className="mx-auto max-w-container-max space-y-lg py-xl text-center lg:text-left"
           >
-            <div className="flex justify-center gap-sm lg:justify-start">
+            <motion.div variants={aparece} className="flex justify-center gap-sm lg:justify-start">
               <span className="rounded-full bg-tertiary-container px-md py-xs font-body text-label-md text-on-tertiary-container">
                 Stock limitado
               </span>
               <span className="rounded-full bg-primary-container px-md py-xs font-body text-label-md text-on-primary-container">
                 Productos virales
               </span>
-            </div>
-            <h1 className="font-heading text-headline-lg leading-tight text-on-surface lg:text-display-lg">
+            </motion.div>
+            <motion.h1
+              variants={aparece}
+              className="font-heading text-headline-lg leading-tight text-on-surface lg:text-display-lg"
+            >
               Tendencias asiáticas que llegan a <span className="italic text-primary">Ayacucho</span>
-            </h1>
-            <p className="mx-auto max-w-xl text-body-lg text-on-surface-variant lg:mx-0">
+            </motion.h1>
+            <motion.p
+              variants={aparece}
+              className="mx-auto max-w-xl text-body-lg text-on-surface-variant lg:mx-0"
+            >
               Descubre la cosmética coreana y la ternura de los productos kawaii. Curados para ti,
               directo a tu WhatsApp.
-            </p>
-            <div className="flex flex-col justify-center gap-md sm:flex-row lg:justify-start">
-              <button className="rounded-full bg-primary px-xl py-md font-body text-label-lg text-on-primary transition-all hover:shadow-lg active:scale-95">
+            </motion.p>
+            <motion.div
+              variants={aparece}
+              className="flex flex-col justify-center gap-md sm:flex-row lg:justify-start"
+            >
+              <Link
+                href="/catalogo"
+                className="rounded-full bg-primary px-xl py-md text-center font-body text-label-lg text-on-primary transition-all hover:shadow-lg active:scale-95"
+              >
                 Ver productos
-              </button>
+              </Link>
               <button className="flex items-center justify-center gap-sm rounded-full border-2 border-primary px-xl py-md font-body text-label-lg text-primary transition-all hover:bg-primary-container">
                 <MessageCircle size={18} /> Comprar por WhatsApp
               </button>
-            </div>
+            </motion.div>
           </motion.div>
         </section>
 
         {/* Categorías */}
         <section className="mx-auto max-w-container-max px-gutter py-xl">
           <h2 className="mb-lg font-heading text-headline-lg text-on-surface">Explora por Categorías</h2>
-          <div className="grid grid-cols-2 gap-md sm:grid-cols-3 lg:grid-cols-6">
+          <motion.div
+            variants={contenedor}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-2 gap-md sm:grid-cols-3 lg:grid-cols-6"
+          >
             {CATEGORIAS.map((c) => (
-              <div
-                key={c.slug}
-                className="flex cursor-pointer flex-col items-center gap-sm rounded-md bg-surface-container-lowest p-md text-center shadow-sm transition-transform hover:-translate-y-1"
-              >
-                <div className="h-16 w-16 rounded-full bg-primary-container/60" />
-                <span className="font-body text-label-lg text-on-surface">{c.nombre}</span>
-              </div>
+              <motion.div key={c.slug} variants={aparece} whileHover={{ y: -4 }}>
+                <Link
+                  href={`/catalogo?categoria=${c.slug}`}
+                  className="flex flex-col items-center gap-sm rounded-md bg-surface-container-lowest p-md text-center shadow-sm transition-shadow hover:shadow-lg"
+                >
+                  <div className="h-16 w-16 rounded-full bg-primary-container/60" />
+                  <span className="font-body text-label-lg text-on-surface">{c.nombre}</span>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Destacados */}
         <section className="mx-auto max-w-container-max px-gutter py-xl">
-          <div className="mb-lg">
-            <h2 className="font-heading text-headline-lg text-on-surface">Los más pedidos</h2>
-            <p className="mt-xs text-body-md text-on-surface-variant">Favoritos de la comunidad OppaStore</p>
+          <div className="mb-lg flex items-end justify-between gap-md">
+            <div>
+              <h2 className="font-heading text-headline-lg text-on-surface">Los más pedidos</h2>
+              <p className="mt-xs text-body-md text-on-surface-variant">Favoritos de la comunidad OppaStore</p>
+            </div>
+            <Link
+              href="/catalogo"
+              className="flex items-center gap-xs font-body text-label-lg text-primary hover:underline"
+            >
+              Ver catálogo <ArrowRight size={16} />
+            </Link>
           </div>
-          <div className="grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-4">
-            {destacados.map((p) => (
-              <ProductCard
-                key={p.id}
-                producto={p}
-                onAgregar={agregar}
-                onFavorito={favorito}
-                esFavorito={favoritos.includes(p.id)}
-              />
-            ))}
-          </div>
+          {destacados.length > 0 ? (
+            <ProductGrid
+              productos={destacados}
+              onAgregar={agregar}
+              onFavorito={favorito}
+              favoritos={favoritos}
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-72 animate-pulse rounded-md bg-surface-container-low" />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Cómo comprar */}
@@ -115,13 +159,20 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 gap-lg md:grid-cols-3">
               {PASOS.map((p) => (
-                <div key={p.n} className="flex flex-col items-center space-y-md text-center">
+                <motion.div
+                  key={p.n}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: p.n * 0.1 }}
+                  className="flex flex-col items-center space-y-md text-center"
+                >
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white font-heading text-headline-sm text-primary shadow-lg">
                     {p.n}
                   </div>
                   <h3 className="font-heading text-headline-sm">{p.titulo}</h3>
                   <p className="text-body-md text-on-surface-variant">{p.texto}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

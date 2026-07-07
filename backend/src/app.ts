@@ -12,11 +12,13 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 export function crearApp() {
   const app = express();
 
-  app.use(
-    cors({
-      origin: process.env.CORS_ORIGIN?.split(",") ?? true,
-    }),
-  );
+  // En producción se restringe a los dominios configurados (RNF12);
+  // en desarrollo se refleja cualquier origen (facilita previews con puerto dinámico).
+  const origenCors =
+    process.env.NODE_ENV === "production"
+      ? (process.env.CORS_ORIGIN?.split(",").map((s) => s.trim()) ?? [])
+      : true;
+  app.use(cors({ origin: origenCors }));
   app.use(express.json());
 
   app.get("/api/v1/health", (_req, res) => {
