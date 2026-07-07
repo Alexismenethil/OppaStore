@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { CatalogoView } from "@/features/catalog/CatalogoView";
+import CatalogoLoading from "./loading";
 
 export const metadata = {
   title: "Catálogo | OppaStore",
@@ -7,7 +8,7 @@ export const metadata = {
 
 export default function CatalogoPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<CatalogoLoading />}>
       <CatalogoView />
     </Suspense>
   );
