@@ -15,13 +15,19 @@ const ETIQUETA_ENTREGA: Record<DatosCliente["metodoEntrega"], string> = {
   delivery: "delivery",
 };
 
-/** Construye el texto del pedido para WhatsApp (RB06, RB16, RB18). */
-export function construirMensaje(items: ItemCarrito[], datos: DatosCliente): string {
+/**
+ * Construye el texto del pedido para WhatsApp (RB06, RB16, RB18).
+ * Si faltan datos del cliente, deja los campos en blanco para completarlos
+ * en la conversación (como el mensaje de ejemplo del negocio).
+ */
+export function construirMensaje(items: ItemCarrito[], datos?: Partial<DatosCliente>): string {
   const lineas = items.map((item, idx) => {
     const precio = formatearSoles(item.producto.precio);
     const sufijo = item.cantidad > 1 ? " c/u" : "";
     return `${idx + 1}. ${item.producto.nombre} - Cantidad: ${item.cantidad} - ${precio}${sufijo}`;
   });
+
+  const entrega = datos?.metodoEntrega ? ETIQUETA_ENTREGA[datos.metodoEntrega] : "recojo / delivery";
 
   return [
     "Hola OppaStore 💚 Quiero realizar este pedido:",
@@ -30,9 +36,9 @@ export function construirMensaje(items: ItemCarrito[], datos: DatosCliente): str
     "",
     `Total aproximado: ${formatearSoles(totalCarrito(items))}`,
     "",
-    `Mi nombre: ${datos.nombre}`,
-    `Mi distrito/zona: ${datos.distrito}`,
-    `Método de entrega: ${ETIQUETA_ENTREGA[datos.metodoEntrega]}`,
+    `Mi nombre: ${datos?.nombre ?? ""}`,
+    `Mi distrito/zona: ${datos?.distrito ?? ""}`,
+    `Método de entrega: ${entrega}`,
   ].join("\n");
 }
 

@@ -54,7 +54,8 @@ export function CatalogControls({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-sm">
+      {/* Chips: scroll horizontal en móvil, wrap en desktop */}
+      <div className="scrollbar-hide -mx-margin-mobile flex gap-sm overflow-x-auto px-margin-mobile pb-xs md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
         {opciones.map((c) => {
           const activa = c.slug === categoriaActiva;
           return (
@@ -62,12 +63,12 @@ export function CatalogControls({
               key={c.slug}
               type="button"
               onClick={() => onCategoria(c.slug)}
-              className="relative rounded-full px-md py-sm font-body text-label-lg transition-colors"
+              className="relative shrink-0 whitespace-nowrap rounded-full border border-outline-variant/50 px-md py-sm font-body text-label-lg transition-colors active:scale-95"
             >
               {activa && (
                 <motion.span
                   layoutId="chip-activa"
-                  className="absolute inset-0 rounded-full bg-primary"
+                  className="absolute inset-0 rounded-full border border-primary bg-primary"
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                 />
               )}

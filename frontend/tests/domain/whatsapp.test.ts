@@ -47,6 +47,14 @@ describe("mensaje de WhatsApp (RB06, RB16, RB18)", () => {
     expect(normalizarNumero("+51 987-654-321")).toBe("51987654321");
   });
 
+  it("sin datos del cliente deja los campos en blanco (mensaje borrador)", () => {
+    const borrador = construirMensaje(items);
+    expect(borrador).toContain("Mi nombre: ");
+    expect(borrador).toContain("Mi distrito/zona: ");
+    expect(borrador).toContain("Método de entrega: recojo / delivery");
+    expect(borrador).toContain("Total aproximado: S/ 173.00");
+  });
+
   it("CP20 · genera el detalle del pedido con snapshot de precio (RB22)", () => {
     const detalle = detallePedido(items);
     expect(detalle).toHaveLength(3);

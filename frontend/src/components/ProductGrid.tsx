@@ -14,7 +14,7 @@ interface Props {
 /** Grilla de productos con entrada/salida animada al filtrar (fluidez). */
 export function ProductGrid({ productos, onAgregar, onFavorito, favoritos = [] }: Props) {
   return (
-    <motion.div layout className="grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-4">
+    <motion.div layout className="grid grid-cols-2 gap-sm sm:gap-md lg:grid-cols-4">
       <AnimatePresence mode="popLayout">
         {productos.map((p) => (
           <motion.div

@@ -3,11 +3,24 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-on-surface font-body antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3, h4, h5 {
     @apply font-heading;
+  }
+  ::selection {
+    @apply bg-primary-container text-on-primary-container;
+  }
+  /* Foco visible y amable (RNF15) */
+  :focus-visible {
+    outline: 2px solid #2f6a3f;
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
@@ -22,6 +35,35 @@
   .glass-card {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  /* Skeleton con brillo animado */
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-surface-container-low;
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+}
+
+@layer utilities {
+  /* Oculta la barra de scroll manteniendo el scroll (chips móviles) */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }

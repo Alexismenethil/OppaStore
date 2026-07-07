@@ -13,7 +13,7 @@ export function StatusBadge({ producto }: { producto: Producto }) {
   return (
     <span
       data-testid="status-badge"
-      className={`inline-block rounded-full px-sm py-xs font-body text-label-md ${clases[estado]}`}
+      className={`inline-block whitespace-nowrap rounded-full px-2 py-[3px] font-body text-[10px] font-medium sm:px-sm sm:py-xs sm:text-label-md ${clases[estado]}`}
     >
       {etiquetaEstado(producto)}
     </span>
