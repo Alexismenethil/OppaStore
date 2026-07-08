@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Home, LayoutGrid, ShoppingCart, User } from "lucide-react";
+import { Heart, Home, LayoutGrid, ShoppingCart, UserRound } from "lucide-react";
 import { useCart } from "@/features/cart/CartContext";
 import { useFavorites } from "@/features/favorites/FavoritesContext";
 
@@ -162,13 +162,24 @@ export function Header() {
               href="/cuenta"
               aria-label="Mi cuenta"
               aria-current={esActivo("/cuenta") ? "page" : undefined}
-              className={`${itemBase} ${
+              className={`group relative ml-0.5 flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(47,106,63,0.10)] active:scale-95 ${
                 esActivo("/cuenta")
-                  ? "bg-white text-primary shadow-[0_10px_24px_rgba(47,106,63,0.12)]"
-                  : "text-on-surface-variant"
+                  ? "bg-white text-primary shadow-[0_10px_24px_rgba(47,106,63,0.12)] ring-1 ring-primary/10"
+                  : "text-on-surface-variant hover:bg-white/75 hover:text-primary"
               }`}
             >
-              <User size={17} className="transition-transform duration-300 group-hover:scale-110" />
+              <UserRound
+                size={20}
+                strokeWidth={2}
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
+              {esActivo("/cuenta") && (
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute inset-x-2 -bottom-1 h-0.5 rounded-full bg-gradient-to-r from-primary via-primary-fixed-dim to-primary"
+                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                />
+              )}
             </Link>
           </nav>
 
@@ -176,9 +187,9 @@ export function Header() {
             <Link
               href="/cuenta"
               aria-label="Mi cuenta"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/60 bg-white/70 text-on-surface shadow-[0_10px_24px_rgba(47,106,63,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:text-primary active:scale-95"
+              className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/75 text-on-surface shadow-[0_10px_24px_rgba(47,106,63,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:text-primary active:scale-95"
             >
-              <User size={20} />
+              <UserRound size={20} className="transition-transform duration-300 group-hover:scale-105" />
             </Link>
             <button
               aria-label="Carrito"

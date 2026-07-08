@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CheckoutForm } from "@/features/checkout/CheckoutForm";
 import { useCart } from "./CartContext";
+import { useAuth } from "@/features/auth/AuthContext";
 import { useToast } from "@/components/ui/Toast";
 import { construirMensaje, enlaceWhatsapp } from "@/domain/whatsapp";
 import { WHATSAPP_NUMERO } from "@/lib/config";
@@ -22,6 +23,7 @@ import type { DatosCliente, ItemCarrito } from "@/domain/types";
  */
 export function CartDrawerHost() {
   const { items, abierto, cerrar, cambiarCantidad, eliminar, vaciar, total } = useCart();
+  const { usuario } = useAuth();
   const { mostrar } = useToast();
 
   const [paso, setPaso] = useState<"carrito" | "datos">("carrito");
@@ -37,6 +39,12 @@ export function CartDrawerHost() {
       setEnviando(false);
     }
   }, [abierto]);
+
+  useEffect(() => {
+    if (!abierto || paso !== "datos" || !usuario?.nombre) return;
+    setDatos((prev) => (prev.nombre?.trim() ? prev : { ...prev, nombre: usuario.nombre }));
+    setErrores((prev) => ({ ...prev, nombre: undefined }));
+  }, [abierto, paso, usuario?.nombre]);
 
   const incrementar = (item: ItemCarrito) => {
     const v = validarCantidad(item.producto, item.cantidad + 1);
