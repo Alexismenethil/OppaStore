@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { LogOut, ShieldCheck, User, Loader2, Heart, ShoppingBag } from "lucide-react";
+import { LogOut, ShieldCheck, User, Loader2, Heart, ShoppingBag, LayoutDashboard } from "lucide-react";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/components/ui/Toast";
 
@@ -16,7 +17,15 @@ export function CuentaView() {
   const params = useSearchParams();
 
   useEffect(() => {
-    if (params.get("error")) mostrar("aviso", "No se pudo completar el inicio con Google. Intenta de nuevo.");
+    const error = params.get("error");
+    if (!error) return;
+
+    const mensaje =
+      error === "admin"
+        ? "Tu cuenta no tiene permisos para entrar al panel admin."
+        : "No se pudo completar el inicio con Google. Intenta de nuevo.";
+
+    mostrar("aviso", mensaje);
   }, [params, mostrar]);
 
   if (cargando) {
@@ -27,7 +36,8 @@ export function CuentaView() {
     );
   }
 
-  if (usuario) return <Perfil usuario={usuario} onSalir={cerrarSesion} onToast={mostrar} />;
+  if (usuario?.esAdmin) return <PerfilAdmin usuario={usuario} onSalir={cerrarSesion} onToast={mostrar} />;
+  if (usuario) return <PerfilCliente usuario={usuario} onSalir={cerrarSesion} onToast={mostrar} />;
 
   return (
     <motion.main
@@ -49,7 +59,7 @@ export function CuentaView() {
 
       <button
         type="button"
-        onClick={iniciarConGoogle}
+        onClick={() => iniciarConGoogle()}
         className="mt-lg flex w-full items-center justify-center gap-sm rounded-full border border-outline-variant bg-surface-container-lowest py-md font-body text-label-lg text-on-surface shadow-sm transition-shadow hover:shadow-md"
       >
         <GoogleIcon />
@@ -63,7 +73,7 @@ export function CuentaView() {
   );
 }
 
-function Perfil({
+function PerfilCliente({
   usuario,
   onSalir,
   onToast,
@@ -90,11 +100,6 @@ function Perfil({
         )}
         <h1 className="mt-md font-heading text-headline-sm text-on-surface">Hola, {usuario.nombre} 👋</h1>
         <p className="text-body-sm text-on-surface-variant">{usuario.email}</p>
-        {usuario.esAdmin && (
-          <span className="mt-sm inline-flex items-center gap-xs rounded-full bg-tertiary-container px-sm py-xs font-body text-label-md text-on-tertiary-container">
-            <ShieldCheck size={14} /> Administrador
-          </span>
-        )}
       </div>
 
       <div className="mt-lg space-y-sm rounded-lg bg-surface-container-low p-md">
@@ -115,6 +120,65 @@ function Perfil({
         className="mt-lg flex w-full items-center justify-center gap-sm rounded-full border border-outline-variant py-md font-body text-label-lg text-on-surface transition-colors hover:bg-surface-container-high"
       >
         <LogOut size={17} /> Cerrar sesión
+      </button>
+    </motion.main>
+  );
+}
+
+function PerfilAdmin({
+  usuario,
+  onSalir,
+  onToast,
+}: {
+  usuario: { nombre: string; email: string; avatarUrl: string | null };
+  onSalir: () => void;
+  onToast: (tipo: "exito" | "aviso", mensaje: string) => void;
+}) {
+  return (
+    <motion.main
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className={CONTENEDOR}
+    >
+      <div className="flex flex-col items-center text-center">
+        {usuario.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={usuario.avatarUrl} alt="" className="h-20 w-20 rounded-full object-cover shadow-sm" />
+        ) : (
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-container text-headline-md font-heading text-on-primary-container">
+            {usuario.nombre.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <h1 className="mt-md font-heading text-headline-sm text-on-surface">{usuario.nombre}</h1>
+        <p className="text-body-sm text-on-surface-variant">{usuario.email}</p>
+        <span className="mt-sm inline-flex items-center gap-xs rounded-full bg-tertiary-container px-sm py-xs font-body text-label-md text-on-tertiary-container">
+          <ShieldCheck size={14} /> Sesión administradora
+        </span>
+      </div>
+
+      <div className="mt-lg rounded-lg bg-surface-container-low p-md">
+        <p className="font-body text-body-sm text-on-surface">
+          Esta sesión administra productos, pedidos, contenido del inicio y usuarios registrados.
+        </p>
+      </div>
+
+      <Link
+        href="/admin"
+        className="mt-lg flex w-full items-center justify-center gap-sm rounded-full bg-primary py-md font-body text-label-lg text-on-primary shadow-sm transition-all hover:shadow-md active:scale-95"
+      >
+        <LayoutDashboard size={17} /> Ir al panel admin
+      </Link>
+
+      <button
+        type="button"
+        onClick={() => {
+          onSalir();
+          onToast("exito", "Sesión admin cerrada.");
+        }}
+        className="mt-lg flex w-full items-center justify-center gap-sm rounded-full border border-outline-variant py-md font-body text-label-lg text-on-surface transition-colors hover:bg-surface-container-high"
+      >
+        <LogOut size={17} /> Cerrar sesión admin
       </button>
     </motion.main>
   );

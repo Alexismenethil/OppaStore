@@ -12,7 +12,7 @@ import type { ItemCarrito, Producto } from "@/domain/types";
 import { fusionarCarritos } from "@/domain/cart";
 import { leerJSON } from "@/lib/storage";
 import { fetchProductos } from "@/lib/api/products";
-import { fetchMe, urlLoginGoogle, type Usuario } from "@/lib/api/auth";
+import { fetchMe, loginAdmin, urlLoginGoogle, type Usuario } from "@/lib/api/auth";
 import {
   getCartRemoto,
   putCartRemoto,
@@ -32,7 +32,8 @@ interface AuthContexto {
   cargando: boolean;
   autenticado: boolean;
   /** Redirige al flujo real de Google. */
-  iniciarConGoogle: () => void;
+  iniciarConGoogle: (next?: string) => void;
+  iniciarAdmin: (email: string, password: string) => Promise<void>;
   cerrarSesion: () => void;
 }
 
@@ -103,8 +104,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUsuario(null);
   }, []);
 
-  const iniciarConGoogle = useCallback(() => {
-    window.location.href = urlLoginGoogle();
+  const iniciarConGoogle = useCallback((next?: string) => {
+    window.location.href = urlLoginGoogle(next);
+  }, []);
+
+  const iniciarAdmin = useCallback(async (email: string, password: string) => {
+    const sesion = await loginAdmin(email, password);
+    tokenRef.current = sesion.token;
+    listoSync.current = true;
+    if (typeof window !== "undefined") window.localStorage.setItem(CLAVE_TOKEN, sesion.token);
+    setUsuario(sesion.usuario);
+    setCargando(false);
   }, []);
 
   // Arranque: token en el hash (retorno de Google = login nuevo → fusiona) o
@@ -116,6 +126,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const m = /[#&]token=([^&]+)/.exec(window.location.hash);
       if (!m) return null;
       const t = decodeURIComponent(m[1]);
+      // En dev, React Strict Mode puede montar el efecto dos veces. Guardamos
+      // el token antes de limpiar el hash para no perderlo entre montajes.
+      window.localStorage.setItem(CLAVE_TOKEN, t);
       history.replaceState(null, "", window.location.pathname + window.location.search);
       return t;
     };
@@ -133,7 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         tokenRef.current = token;
         window.localStorage.setItem(CLAVE_TOKEN, token);
         setUsuario(u);
-        if (nuevoGoogle) await fusionarConGuardado(token); // login nuevo → fusiona (CP19)
+        if (nuevoGoogle && !u.esAdmin) await fusionarConGuardado(token); // login cliente nuevo → fusiona (CP19)
       } catch {
         if (vigente) cerrarSesion();
       } finally {
@@ -153,7 +166,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Persistencia continua: empuja el carrito al servidor mientras haya sesión (RF39).
   useEffect(() => {
-    if (!usuario || !listoSync.current || !tokenRef.current) return;
+    if (!usuario || usuario.esAdmin || !listoSync.current || !tokenRef.current) return;
     const token = tokenRef.current;
     const t = setTimeout(() => {
       putCartRemoto(token, aGuardado(cart.items)).catch(() => {});
@@ -163,7 +176,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Persistencia continua de favoritos (RF37).
   useEffect(() => {
-    if (!usuario || !listoSync.current || !tokenRef.current) return;
+    if (!usuario || usuario.esAdmin || !listoSync.current || !tokenRef.current) return;
     const token = tokenRef.current;
     const t = setTimeout(() => {
       putFavoritesRemoto(token, favoritos.ids).catch(() => {});
@@ -178,6 +191,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         cargando,
         autenticado: usuario !== null,
         iniciarConGoogle,
+        iniciarAdmin,
         cerrarSesion,
       }}
     >

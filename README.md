@@ -14,7 +14,7 @@ Aseguramiento de la Calidad de Software*, desarrollado con **Spec Driven Develop
 |------|-------|--------|
 | Frontend | Next.js (App Router) · TypeScript · Tailwind · Framer Motion · Lucide | Vercel |
 | Backend | Express · PostgreSQL · Prisma | Render |
-| Auth | Google OAuth + JWT (login opcional) | — |
+| Auth | Google OAuth + JWT para clientes · correo/contraseña para admin | — |
 | Pruebas | Vitest · React Testing Library · Playwright | — |
 
 ## Puesta en marcha (desarrollo)
@@ -39,6 +39,48 @@ cp .env.example .env.local
 npm install
 npm run dev                 # app en http://localhost:3000
 ```
+
+Credenciales admin de desarrollo:
+
+```txt
+Correo: admin@oppastore.pe
+Contraseña: Admin12345
+```
+
+## Variables para deploy
+
+Backend:
+
+```env
+DATABASE_URL=postgresql://...
+CORS_ORIGIN=https://tu-frontend.vercel.app
+FRONTEND_URL=https://tu-frontend.vercel.app
+JWT_SECRET=un-secreto-largo-y-seguro
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=https://tu-backend.onrender.com/api/v1/auth/google/callback
+ADMIN_LOGIN_EMAIL=admin@oppastore.pe
+ADMIN_LOGIN_PASSWORD=una-contrasena-segura
+ADMIN_LOGIN_NAME=Administrador OppaStore
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_FOLDER=oppastore
+```
+
+Frontend:
+
+```env
+NEXT_PUBLIC_API_URL=https://tu-backend.onrender.com/api/v1
+NEXT_PUBLIC_WHATSAPP_NUMERO=51999999999
+```
+
+Notas de deploy:
+
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` son obligatorias para subir fotos desde el panel admin.
+- `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` son obligatorias solo si se usará login Google para clientes.
+- `JWT_SECRET`, `ADMIN_LOGIN_PASSWORD`, `DATABASE_URL`, `CORS_ORIGIN`, `FRONTEND_URL` y `NEXT_PUBLIC_API_URL` deben cambiarse respecto a desarrollo.
+- `PORT=4000` queda solo para local; en Render normalmente lo define la plataforma.
 
 ## Pruebas
 

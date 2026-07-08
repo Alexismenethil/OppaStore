@@ -1,5 +1,8 @@
-import "dotenv/config";
+import { fileURLToPath } from "node:url";
+import dotenv from "dotenv";
 import { crearApp } from "./app";
+
+dotenv.config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
 const port = Number(process.env.PORT ?? 4000);
 

@@ -41,10 +41,10 @@ export function CartDrawerHost() {
   }, [abierto]);
 
   useEffect(() => {
-    if (!abierto || paso !== "datos" || !usuario?.nombre) return;
+    if (!abierto || paso !== "datos" || !usuario?.nombre || usuario.esAdmin) return;
     setDatos((prev) => (prev.nombre?.trim() ? prev : { ...prev, nombre: usuario.nombre }));
     setErrores((prev) => ({ ...prev, nombre: undefined }));
-  }, [abierto, paso, usuario?.nombre]);
+  }, [abierto, paso, usuario?.esAdmin, usuario?.nombre]);
 
   const incrementar = (item: ItemCarrito) => {
     const v = validarCantidad(item.producto, item.cantidad + 1);

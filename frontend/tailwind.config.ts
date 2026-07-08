@@ -7,6 +7,18 @@ import type { Config } from "tailwindcss";
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx,mdx}"],
+  // Overlays de categorías editables desde el panel admin (valores en BD):
+  // deben generarse aunque no aparezcan literalmente en el código.
+  safelist: [
+    "from-surface-container-highest/80",
+    "from-secondary-container/80",
+    "from-tertiary-container/80",
+    "from-surface-container-low/80",
+    "from-primary-container/80",
+    "from-secondary-fixed/80",
+    "from-error-container/80",
+    "from-surface/80",
+  ],
   theme: {
     extend: {
       colors: {

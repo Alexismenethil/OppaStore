@@ -50,6 +50,9 @@ model Categoria {
   slug        String     @unique
   nombre      String
   descripcion String?
+  imagenUrl   String?    @map("imagen_url")
+  overlay     String?
+  orden       Int        @default(0)
   productos   Producto[]
 
   @@map("categorias")
@@ -71,6 +74,7 @@ model Producto {
   fechaVencimiento     DateTime?     @map("fecha_vencimiento") @db.Date
   infoAdicional        Json?         @map("info_adicional")
   imagenUrl            String?       @map("imagen_url")
+  imagenes             Json?
   destacado            Boolean       @default(false)
   createdAt            DateTime      @default(now()) @map("created_at")
   updatedAt            DateTime      @updatedAt @map("updated_at")
@@ -79,6 +83,26 @@ model Producto {
   pedidoItems          PedidoItem[]
 
   @@map("productos")
+}
+
+// Configuración editable del sitio (singleton, id = "default"). Reúne el contenido
+// que el admin controla desde el panel: hero, redes/contacto del footer (RF10) y el
+// drop que se muestra en el inicio. Sprint 4.
+model SiteConfig {
+  id                 String   @id @default("default")
+  heroFlatLayUrl     String?  @map("hero_flat_lay_url")
+  heroPandaUrl       String?  @map("hero_panda_url")
+  heroPandaEtiqueta  String?  @map("hero_panda_etiqueta")
+  dropHomeProductoId String?  @map("drop_home_producto_id")
+  whatsapp           String?
+  email              String?
+  facebook           String?
+  instagram          String?
+  tiktok             String?
+  direccion          String?
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("site_config")
 }
 
 model Favorito {

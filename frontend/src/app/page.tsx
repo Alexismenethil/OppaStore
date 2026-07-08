@@ -14,11 +14,11 @@ import {
 import { ProductGrid } from "@/components/ProductGrid";
 import { DropCountdown } from "@/components/DropCountdown";
 import { useProductos } from "@/features/catalog/useProductos";
+import { useDestacados } from "@/features/catalog/useDestacados";
 import { useCart } from "@/features/cart/CartContext";
 import { useFavorites } from "@/features/favorites/FavoritesContext";
 import { useToast } from "@/components/ui/Toast";
-import { CATEGORIAS } from "@/data/products.seed";
-import { MEDIA_CATEGORIAS, HERO_MEDIA } from "@/data/categorias.media";
+import { useSiteConfig } from "@/features/config/ConfigContext";
 import { formatearSoles } from "@/domain/money";
 import type { Producto } from "@/domain/types";
 
@@ -45,12 +45,19 @@ const aparece = {
 
 export default function HomePage() {
   const { productos } = useProductos();
+  const { destacados: masVendidos } = useDestacados(4);
+  const { config, categorias } = useSiteConfig();
   const { agregar, abrir } = useCart();
   const favoritosCtx = useFavorites();
   const { mostrar } = useToast();
 
-  const destacados = productos.filter((p) => p.destacado).slice(0, 4);
-  const drop = productos.find((p) => p.tipo === "drop" && p.esPreventa);
+  // "Los más pedidos" viene de ventas reales (RF48); si aún no hay, respaldo local.
+  const destacados =
+    masVendidos.length > 0 ? masVendidos : productos.filter((p) => p.destacado).slice(0, 4);
+  // El drop del inicio lo elige el admin; si no, el primer drop en preventa.
+  const drop =
+    productos.find((p) => p.id === config.dropHomeProductoId) ??
+    productos.find((p) => p.tipo === "drop" && p.esPreventa);
 
   const alAgregar = (p: Producto) => {
     const r = agregar(p, 1);
@@ -129,14 +136,16 @@ export default function HomePage() {
           >
             <div className="glass-card h-full w-full rounded-xl p-md shadow-xl">
               <div className="relative h-full w-full overflow-hidden rounded-lg">
-                <Image
-                  src={HERO_MEDIA.flatLay}
-                  alt="Skincare coreano sobre superficie clara con hojas de menta"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 90vw, 440px"
-                  className="object-cover"
-                />
+                {config.heroFlatLayUrl && (
+                  <Image
+                    src={config.heroFlatLayUrl}
+                    alt="Skincare coreano sobre superficie clara con hojas de menta"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 90vw, 440px"
+                    className="object-cover"
+                  />
+                )}
               </div>
             </div>
             <motion.div
@@ -145,16 +154,18 @@ export default function HomePage() {
               className="absolute -bottom-8 -right-6 w-40 rounded-lg bg-white p-sm shadow-2xl lg:-right-10 lg:w-48"
             >
               <div className="relative aspect-square overflow-hidden rounded-[0.9rem]">
-                <Image
-                  src={HERO_MEDIA.panda}
-                  alt="Peluche panda kawaii con bufanda roja"
-                  fill
-                  sizes="192px"
-                  className="object-cover"
-                />
+                {config.heroPandaUrl && (
+                  <Image
+                    src={config.heroPandaUrl}
+                    alt="Peluche panda kawaii con bufanda roja"
+                    fill
+                    sizes="192px"
+                    className="object-cover"
+                  />
+                )}
               </div>
               <p className="mt-xs text-center font-body text-label-md text-primary">
-                Novedad Kawaii
+                {config.heroPandaEtiqueta ?? "Novedad Kawaii"}
               </p>
             </motion.div>
           </motion.div>
@@ -176,17 +187,16 @@ export default function HomePage() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-2 gap-sm sm:gap-md lg:grid-cols-3"
         >
-          {CATEGORIAS.map((c) => {
-            const media = MEDIA_CATEGORIAS[c.slug];
+          {categorias.map((c) => {
             return (
               <motion.div key={c.slug} variants={aparece}>
                 <Link
                   href={`/catalogo?categoria=${c.slug}`}
                   className="group relative block h-32 overflow-hidden rounded-md shadow-sm transition-shadow hover:shadow-xl sm:h-44 md:rounded-lg"
                 >
-                  {media && (
+                  {c.imagenUrl && (
                     <Image
-                      src={media.imagen}
+                      src={c.imagenUrl}
                       alt={c.nombre}
                       fill
                       sizes="(max-width: 640px) 50vw, 33vw"
@@ -194,7 +204,7 @@ export default function HomePage() {
                     />
                   )}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-r ${media?.overlay ?? "from-surface/80"} to-transparent`}
+                    className={`absolute inset-0 bg-gradient-to-r ${c.overlay ?? "from-surface/80"} to-transparent`}
                   />
                   <div className="absolute inset-0 flex flex-col justify-end p-sm sm:p-md">
                     <span className="font-heading text-[15px] font-semibold text-on-surface sm:text-headline-sm">

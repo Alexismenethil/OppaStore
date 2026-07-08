@@ -63,6 +63,14 @@ export async function fetchProductos(params: ParamsCatalogo = {}): Promise<Produ
   return data.map(mapProducto);
 }
 
+/** GET /products/destacados — "los más pedidos" calculados por ventas (RF48). */
+export async function fetchDestacados(limit = 4): Promise<Producto[]> {
+  const res = await fetch(`${API_URL}/products/destacados?limit=${limit}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Error al obtener destacados (${res.status})`);
+  const data: ApiProducto[] = await res.json();
+  return data.map(mapProducto);
+}
+
 /** GET /products/:slug — detalle de producto (RF18). */
 export async function fetchProducto(slug: string): Promise<Producto | null> {
   const res = await fetch(`${API_URL}/products/${slug}`, { cache: "no-store" });

@@ -20,7 +20,7 @@ export function autenticar(req: ReqConUsuario, res: Response, next: NextFunction
 }
 
 /**
- * Exige un usuario administrador (allowlist, RF42/RB23/CP21 — Sprint 4).
+ * Exige un usuario administrador autenticado en el panel (RF42/CP21 — Sprint 4).
  * 401 si no hay sesión; 403 si la sesión no es admin.
  */
 export function soloAdmin(req: ReqConUsuario, res: Response, next: NextFunction) {
