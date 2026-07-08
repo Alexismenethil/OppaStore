@@ -17,7 +17,7 @@ const CONFIG_DEFECTO: SiteConfig = {
   heroPandaUrl: HERO_MEDIA.panda,
   heroPandaEtiqueta: "Novedad Kawaii",
   dropHomeProductoId: null,
-  whatsapp: WHATSAPP_NUMERO,
+  whatsapp: WHATSAPP_NUMERO || null,
   email: null,
   facebook: null,
   instagram: null,

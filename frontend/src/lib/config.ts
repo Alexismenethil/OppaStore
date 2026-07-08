@@ -2,7 +2,7 @@
 
 /** Número de WhatsApp del negocio (formato internacional). RF29. */
 export const WHATSAPP_NUMERO =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMERO ?? "51999999999";
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMERO?.trim() ?? "";
 
 /** URL base de la API del backend. */
 export const API_URL =
