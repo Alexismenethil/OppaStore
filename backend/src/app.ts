@@ -1,11 +1,11 @@
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
-import { productsRouter } from "./routes/products";
-import { ordersRouter } from "./routes/orders";
-import { authRouter } from "./routes/auth";
-import { syncRouter } from "./routes/sync";
-import { adminRouter } from "./routes/admin";
-import { siteRouter } from "./routes/site";
+import { productsRouter } from "./routes/products.js";
+import { ordersRouter } from "./routes/orders.js";
+import { authRouter } from "./routes/auth.js";
+import { syncRouter } from "./routes/sync.js";
+import { adminRouter } from "./routes/admin.js";
+import { siteRouter } from "./routes/site.js";
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.error(err);

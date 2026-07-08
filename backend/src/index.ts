@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
-import { crearApp } from "./app";
+import { crearApp } from "./app.js";
 
 dotenv.config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 

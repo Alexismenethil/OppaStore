@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
-import { prisma } from "../lib/prisma";
-import { autenticar, type ReqConUsuario } from "../middleware/auth";
+import { prisma } from "../lib/prisma.js";
+import { autenticar, type ReqConUsuario } from "../middleware/auth.js";
 
 /**
  * Sincronización del carrito y favoritos del usuario autenticado (RF37, RF39–RF41).

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
-import { prisma } from "../lib/prisma";
-import { firmarToken } from "../lib/jwt";
-import { upsertUsuario } from "../lib/usuarios";
-import { autenticar, type ReqConUsuario } from "../middleware/auth";
-import { adminLoginConfigurado, credencialesAdminValidas, datosAdminConfigurado } from "../lib/adminAuth";
+import { prisma } from "../lib/prisma.js";
+import { firmarToken } from "../lib/jwt.js";
+import { upsertUsuario } from "../lib/usuarios.js";
+import { autenticar, type ReqConUsuario } from "../middleware/auth.js";
+import { adminLoginConfigurado, credencialesAdminValidas, datosAdminConfigurado } from "../lib/adminAuth.js";
 
 export const authRouter = Router();
 

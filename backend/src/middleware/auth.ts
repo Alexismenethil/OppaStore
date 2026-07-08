@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { verificarToken, type TokenPayload } from "../lib/jwt";
+import { verificarToken, type TokenPayload } from "../lib/jwt.js";
 
 export interface ReqConUsuario extends Request {
   usuario?: TokenPayload;

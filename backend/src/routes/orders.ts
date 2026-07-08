@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
-import { prisma } from "../lib/prisma";
-import { formatearSoles, redondear2 } from "../lib/money";
+import { prisma } from "../lib/prisma.js";
+import { formatearSoles, redondear2 } from "../lib/money.js";
 
 export const ordersRouter = Router();
 

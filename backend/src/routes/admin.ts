@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../lib/prisma";
-import { soloAdmin } from "../middleware/auth";
-import { generarSlug } from "../lib/slug";
-import { cloudinaryConfigurado, firmarSubida } from "../lib/cloudinary";
+import { prisma } from "../lib/prisma.js";
+import { soloAdmin } from "../middleware/auth.js";
+import { generarSlug } from "../lib/slug.js";
+import { cloudinaryConfigurado, firmarSubida } from "../lib/cloudinary.js";
 
 /**
  * Panel administrador (RF42–RF48, HU08/HU09/HU13/HU16). Toda la ruta exige una
