@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Home, LayoutGrid, ShoppingCart } from "lucide-react";
+import { Heart, Home, LayoutGrid, ShoppingCart, User } from "lucide-react";
 import { useCart } from "@/features/cart/CartContext";
 import { useFavorites } from "@/features/favorites/FavoritesContext";
 
@@ -157,29 +157,51 @@ export function Header() {
                 )}
               </AnimatePresence>
             </button>
+
+            <Link
+              href="/cuenta"
+              aria-label="Mi cuenta"
+              aria-current={esActivo("/cuenta") ? "page" : undefined}
+              className={`${itemBase} ${
+                esActivo("/cuenta")
+                  ? "bg-white text-primary shadow-[0_10px_24px_rgba(47,106,63,0.12)]"
+                  : "text-on-surface-variant"
+              }`}
+            >
+              <User size={17} className="transition-transform duration-300 group-hover:scale-110" />
+            </Link>
           </nav>
 
-          <button
-            aria-label="Carrito"
-            onClick={abrir}
-            className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/60 bg-white/70 text-on-surface shadow-[0_10px_24px_rgba(47,106,63,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:text-primary active:scale-95 md:hidden"
-          >
-            <ShoppingCart size={21} className="transition-transform duration-300 group-hover:scale-110" />
-            <AnimatePresence>
-              {totalUnidades > 0 && (
-                <motion.span
-                  key={totalUnidades}
-                  initial={{ scale: 0.4 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 18 }}
-                  className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-on-primary shadow-sm"
-                >
-                  {totalUnidades}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+          <div className="flex items-center gap-xs md:hidden">
+            <Link
+              href="/cuenta"
+              aria-label="Mi cuenta"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/60 bg-white/70 text-on-surface shadow-[0_10px_24px_rgba(47,106,63,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:text-primary active:scale-95"
+            >
+              <User size={20} />
+            </Link>
+            <button
+              aria-label="Carrito"
+              onClick={abrir}
+              className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/60 bg-white/70 text-on-surface shadow-[0_10px_24px_rgba(47,106,63,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:text-primary active:scale-95"
+            >
+              <ShoppingCart size={21} className="transition-transform duration-300 group-hover:scale-110" />
+              <AnimatePresence>
+                {totalUnidades > 0 && (
+                  <motion.span
+                    key={totalUnidades}
+                    initial={{ scale: 0.4 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 18 }}
+                    className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-on-primary shadow-sm"
+                  >
+                    {totalUnidades}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
       </div>
     </header>

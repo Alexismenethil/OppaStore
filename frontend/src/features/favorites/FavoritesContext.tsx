@@ -18,6 +18,8 @@ interface FavoritesContexto {
   esFavorito: (productoId: string) => boolean;
   /** Alterna y devuelve `true` si quedó marcado como favorito. */
   alternar: (productoId: string) => boolean;
+  /** Reemplaza la lista completa (usado al fusionar con los favoritos guardados). */
+  reemplazar: (ids: string[]) => void;
   totalFavoritos: number;
 }
 
@@ -51,14 +53,17 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     [ids],
   );
 
+  const reemplazar = useCallback((nuevos: string[]) => setIds([...new Set(nuevos)]), []);
+
   const valor = useMemo<FavoritesContexto>(
     () => ({
       ids,
       esFavorito: (productoId: string) => esFavorito(ids, productoId),
       alternar,
+      reemplazar,
       totalFavoritos: ids.length,
     }),
-    [ids, alternar],
+    [ids, alternar, reemplazar],
   );
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;

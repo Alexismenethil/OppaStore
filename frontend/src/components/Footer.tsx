@@ -6,7 +6,6 @@ import { normalizarNumero } from "@/domain/whatsapp";
 
 const tienda = [
   { label: "Catálogo", href: "/catalogo" },
-  { label: "Drops", href: "/catalogo?categoria=drops" },
   { label: "Favoritos", href: "/favoritos" },
 ];
 

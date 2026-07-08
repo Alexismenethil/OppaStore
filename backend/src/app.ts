@@ -2,6 +2,8 @@ import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import { productsRouter } from "./routes/products";
 import { ordersRouter } from "./routes/orders";
+import { authRouter } from "./routes/auth";
+import { syncRouter } from "./routes/sync";
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   console.error(err);
@@ -27,6 +29,8 @@ export function crearApp() {
 
   app.use("/api/v1/products", productsRouter);
   app.use("/api/v1/orders", ordersRouter);
+  app.use("/api/v1/auth", authRouter);
+  app.use("/api/v1/me", syncRouter);
 
   app.use(errorHandler);
   return app;

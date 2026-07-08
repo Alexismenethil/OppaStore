@@ -34,6 +34,8 @@ interface CartContexto {
   cambiarCantidad: (productoId: string, cantidad: number) => void;
   eliminar: (productoId: string) => void;
   vaciar: () => void;
+  /** Reemplaza el carrito completo (usado al fusionar con el carrito guardado, RB21). */
+  reemplazar: (items: ItemCarrito[]) => void;
   totalUnidades: number;
   total: number;
 }
@@ -82,6 +84,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const vaciar = useCallback(() => setItems([]), []);
+  const reemplazar = useCallback((nuevos: ItemCarrito[]) => setItems(nuevos), []);
   const abrir = useCallback(() => setAbierto(true), []);
   const cerrar = useCallback(() => setAbierto(false), []);
 
@@ -95,10 +98,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       cambiarCantidad,
       eliminar,
       vaciar,
+      reemplazar,
       totalUnidades: contarItems(items),
       total: totalCarrito(items),
     }),
-    [items, abierto, abrir, cerrar, agregar, cambiarCantidad, eliminar, vaciar],
+    [items, abierto, abrir, cerrar, agregar, cambiarCantidad, eliminar, vaciar, reemplazar],
   );
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>;
