@@ -13,6 +13,8 @@ test.describe("Home (Sprint 0)", () => {
     await page.goto("/");
     const agregar = page.getByRole("button", { name: /agregar al carrito/i }).first();
     await agregar.click();
-    await expect(page.getByLabel("Carrito")).toContainText("1");
+    await expect(
+      page.getByRole("banner").getByRole("button", { name: "Carrito" }),
+    ).toContainText("1");
   });
 });
