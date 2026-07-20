@@ -1,6 +1,15 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Home (Sprint 0)", () => {
+  test("CP02 · muestra el titular de tendencias para la ciudad del visitante", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(
+      page.getByRole("heading", { name: "Tendencias asiáticas que llegan a tu ciudad" }),
+    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tendencias asiáticas que llegan a Ayacucho" })).toHaveCount(0);
+  });
+
   test("CP01 · muestra productos destacados activos", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: /Los más pedidos/i })).toBeVisible();

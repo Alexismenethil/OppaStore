@@ -99,7 +99,7 @@ export default function HomePage() {
               className="font-heading text-[34px] font-bold leading-[1.15] text-on-surface sm:text-headline-lg lg:text-display-lg"
             >
               Tendencias asiáticas que llegan a{" "}
-              <span className="italic text-primary">Ayacucho</span>
+              <span className="italic text-primary">tu ciudad</span>
             </motion.h1>
             <motion.p
               variants={aparece}
