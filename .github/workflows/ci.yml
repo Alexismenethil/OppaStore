@@ -1,0 +1,189 @@
+name: CI
+
+# Se ejecuta en cada push a main y en cada Pull Request hacia main.
+# Implementa lo definido en especificaciones/10-plan-de-pruebas-qa.md:
+# "GitHub Actions ejecuta lint + unit + componente + integración en cada push; E2E en PR".
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  frontend:
+    name: Frontend — typecheck, lint, tests, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: "Tests unitarios + componente (RNF13: cobertura de dominio >= 80%)"
+        run: npm run test:cov
+
+      - name: Build de producción (next build)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
+          NEXT_PUBLIC_WHATSAPP_NUMERO: "51900000000"
+
+  backend:
+    name: Backend — typecheck, tests de integración, build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: oppastore
+          POSTGRES_PASSWORD: oppastore
+          POSTGRES_DB: oppastore
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oppastore -d oppastore"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://oppastore:oppastore@localhost:5432/oppastore?schema=public
+      JWT_SECRET: ci-test-secret
+      CORS_ORIGIN: http://localhost:3000
+      FRONTEND_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Generar cliente Prisma
+        run: npx prisma generate
+
+      - name: Aplicar migraciones
+        run: npm run prisma:deploy
+
+      - name: Sembrar datos de prueba (requeridos por tests de integración)
+        run: npm run seed
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: "Tests (unit + integración: auth, orders, sync, admin...)"
+        run: npm test
+
+      - name: Build de producción (lo mismo que corre Render)
+        run: npm run build
+
+  e2e:
+    name: E2E (Playwright) — solo en Pull Request
+    if: github.event_name == 'pull_request'
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: oppastore
+          POSTGRES_PASSWORD: oppastore
+          POSTGRES_DB: oppastore
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oppastore -d oppastore"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://oppastore:oppastore@localhost:5432/oppastore?schema=public
+      JWT_SECRET: ci-test-secret
+      CORS_ORIGIN: http://localhost:3000
+      FRONTEND_URL: http://localhost:3000
+      PORT: "4000"
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api/v1
+      NEXT_PUBLIC_WHATSAPP_NUMERO: "51900000000"
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias del backend
+        working-directory: backend
+        run: npm ci
+
+      - name: Preparar base de datos (migrar + sembrar)
+        working-directory: backend
+        run: |
+          npx prisma generate
+          npm run prisma:deploy
+          npm run seed
+
+      - name: Levantar backend en segundo plano
+        working-directory: backend
+        run: |
+          npm run build
+          npm start &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4000/api/v1/health > /dev/null; then
+              echo "Backend listo"
+              exit 0
+            fi
+            echo "Esperando backend... intento $i"
+            sleep 2
+          done
+          echo "El backend no respondió a tiempo" >&2
+          exit 1
+
+      - name: Instalar dependencias del frontend
+        working-directory: frontend
+        run: npm ci
+
+      - name: Instalar navegadores de Playwright
+        working-directory: frontend
+        run: npx playwright install --with-deps
+
+      - name: Ejecutar tests E2E
+        working-directory: frontend
+        run: npm run test:e2e
+
+      - name: Subir reporte de Playwright
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 7
