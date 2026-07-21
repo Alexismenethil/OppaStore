@@ -79,5 +79,38 @@ el instrumento de la tesis de referencia y categorizando por subcaracterísticas
 - **Reportes:** cobertura Vitest (HTML/LCOV), reporte Playwright (HTML con trazas y capturas).
 - **Gestión de defectos:** issues etiquetados por módulo y severidad; se referencia el CP que lo detectó.
 
+## 8. Resultados reales de la auditoría as-built
+
+Esta sección separa las metas originales de la evidencia ejecutada posteriormente.
+
+| Nivel/verificación | Evidencia actual | Resultado |
+|---|---|---|
+| Unitarias, dominio, componentes, contexts y clientes frontend | Vitest + React Testing Library, 33 archivos | **379/379 pruebas en verde** |
+| Unitarias e integración backend | Vitest + Supertest + Prisma/PostgreSQL, 11 archivos | **147/147 pruebas en verde** tras migración/seed; un primer intento sufrió un timeout transitorio y la repetición completa pasó |
+| E2E | Playwright, 22 escenarios ejecutados en desktop y mobile | **44 ejecuciones**: 4 pasaron, 29 fallaron y 11 se omitieron; una repetición del catálogo dio 1/8 en verde, por lo que la suite no se considera aprobada |
+| Cobertura frontend | alcance definido en `frontend/vitest.config.ts` | statements 99.28%, branches 96.43%, functions 95.62%, lines 99.28%; `src/domain/**` alcanza 100% en las cuatro métricas |
+| Cobertura backend | rutas, middleware y librerías incluidos por `backend/vitest.config.ts` | statements 90.31%, branches 80.16%, functions 100%, lines 90.31% |
+| Typecheck | `tsc --noEmit` en ambos paquetes | En verde |
+| Build de producción | `next build`; `prisma generate && tsc` | Ambos en verde |
+| Lighthouse / axe | No se encontró reporte ejecutado | Pendiente |
+| SUS | No se encontró encuesta ni consolidado de resultados | Pendiente |
+
+La cobertura se interpreta por cuatro dimensiones: **statements** (sentencias ejecutadas),
+**branches** (ramas de decisión recorridas), **functions** (funciones invocadas) y **lines**
+(líneas ejecutadas). El porcentaje global solo corresponde a los archivos incluidos por cada
+configuración de Vitest.
+
+### Desviaciones relevantes del plan
+
+- El backend as-built concentra reglas en `routes/`, `middleware/` y `lib/`; no existe el
+  directorio `backend/src/services` previsto originalmente.
+- CP16/CP21 no tienen un E2E admin dedicado y CP19 no ejecuta OAuth real contra Google.
+- CP15 no aparece como escenario nominal completo en los archivos Playwright actuales; el cierre
+  WhatsApp está ampliamente probado en unitarias y componentes.
+- La CI sí está implementada en `.github/workflows/ci.yml` (commit `1a5f325`) y ejecuta E2E en pull
+  requests, por lo que la palabra “recomendado” de §7 representa el estado histórico anterior.
+
 ---
 _Control de cambios: v1.0 (2026-07-07) — versión inicial._
+
+_v2.0 — Actualización as-built basada en la implementación, pruebas e historial Git._

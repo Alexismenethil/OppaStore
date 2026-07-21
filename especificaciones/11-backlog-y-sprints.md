@@ -80,5 +80,43 @@ Scrum Team), tal como plantea la metodología del curso.
 **Done (para cerrar una historia):** código + pruebas en verde, cobertura de dominio ≥ 80 %,
 criterios de aceptación satisfechos, sin errores de lint/TS, incremento desplegable.
 
+## 6. Estado real de implementación
+
+Esta sección es retrospectiva. Los puntos y sprints anteriores se conservan como planificación
+histórica; los estados siguientes se obtienen del código, las pruebas y commits identificables. No
+se infieren fechas ni responsables.
+
+| HU | Estado as-built | Tareas completadas | Archivos asociados | Pruebas asociadas | Evidencia Git clara |
+|---|---|---|---|---|---|
+| HU01 | Completada | Home, hero, categorías, destacados activos/por ventas y tarjetas con precio/estado | `app/page.tsx`, `ProductCard.tsx`, `StatusBadge.tsx`, `routes/products.ts`, `routes/site.ts` | `home.spec.ts`, `ProductCard.test.tsx`, `StatusBadge.test.tsx`, `products.test.ts`, `site.test.ts` | `d0ba278`, `69a53f6`, `de69fd9`; titular posterior `0f18fdd` |
+| HU02 | Completada | Filtro de catálogo por categoría y parámetro URL | `CatalogoView.tsx`, `CatalogControls.tsx`, `domain/catalog.ts`, `routes/products.ts` | `catalog.test.ts`, `CatalogoView.test.tsx`, `CatalogControls.test.tsx`, `products.test.ts`, `catalogo.spec.ts` | `69a53f6` |
+| HU03 | Completada | Agregar desde tarjeta/detalle y bloquear agotado o exceso de stock | `domain/cart.ts`, `ProductCard.tsx`, `ProductoDetalle.tsx`, `CartContext.tsx` | `cart.test.ts`, `CartContext.test.tsx`, `DetalleProducto.test.tsx`, `carrito.spec.ts` | `d0ba278`, `defd3f4`, `e96cd7c` |
+| HU04 | Completada | Aumentar, disminuir, eliminar y recalcular subtotales/total | `domain/cart.ts`, `CartDrawer.tsx`, `CartContext.tsx` | `cart.test.ts`, `CartDrawer.test.tsx`, `CartContext.test.tsx`, `carrito.spec.ts` | `defd3f4`, `e96cd7c` |
+| HU05 | Parcial | Formulario, validación, mensaje, POST de pedido y redirect `wa.me` | `domain/checkout.ts`, `domain/whatsapp.ts`, `CheckoutForm.tsx`, `CartDrawerHost.tsx`, `routes/orders.ts` | `checkout.test.ts`, `whatsapp.test.ts`, `CheckoutForm.test.tsx`, `CartDrawerHost.test.tsx`, `orders.test.ts`; E2E local con fallos | `e96cd7c`, corrección `4913813` |
+| HU06 | Completada | Estado derivado, badges, preventa y fecha estimada | `domain/productStatus.ts`, `StatusBadge.tsx`, `DropCountdown.tsx`, `ProductoDetalle.tsx` | `productStatus.test.ts`, `StatusBadge.test.tsx`, `DropCountdown.test.tsx`, `DetalleProducto.test.tsx` | `d0ba278`, `defd3f4`, `e96cd7c` |
+| HU07 | Completada | Alternar favorito sin duplicados y persistir | `domain/favorites.ts`, `FavoritesContext.tsx`, `ProductCard.tsx` | `favorites.test.ts`, `FavoritesContext.test.tsx`, `ProductCard.test.tsx` | `defd3f4`, `fc059ef` |
+| HU08 | Parcial | Alta de productos, campos específicos, imágenes y autorización admin | `ProductoForm.tsx`, `ImageUploader.tsx`, `routes/admin.ts`, `AdminShell.tsx` | `admin.test.ts`, `lib.test.ts`, `apiAdmin.test.ts`, `AdminShell.test.tsx` | `de69fd9` |
+| HU09 | Completada | Actualización de stock, activo/preventa y estado derivado | `ProductoForm.tsx`, `routes/admin.ts`, `domain/productStatus.ts` | `admin.test.ts`, `apiAdmin.test.ts`, `productStatus.test.ts` | `de69fd9` |
+| HU10 | Completada | Información específica de skincare/snack en detalle | `InfoEspecifica.tsx`, `ProductoDetalle.tsx`, `routes/products.ts` | `InfoEspecifica.test.tsx`, `DetalleProducto.test.tsx`, `products.test.ts` | `e96cd7c` |
+| HU11 | Completada | Búsqueda parcial sin distinguir mayúsculas y limpieza de filtros | `domain/catalog.ts`, `CatalogoView.tsx`, `routes/products.ts` | `catalog.test.ts`, `CatalogoView.test.tsx`, `products.test.ts`, `catalogo.spec.ts` | `69a53f6` |
+| HU12 | Completada | Vista y retirada de favoritos | `app/favoritos/page.tsx`, `FavoritesContext.tsx` | `FavoritesContext.test.tsx`, `favorites.test.ts` | `defd3f4` |
+| HU13 | Completada | Desactivación y borrado lógico cuando existe historial | `app/admin/productos/page.tsx`, `routes/admin.ts`, `routes/products.ts` | `admin.test.ts`, `apiAdmin.test.ts`, `products.test.ts` | `de69fd9` |
+| HU14 | Parcial | OAuth Google opcional, JWT, fusión y checkout invitado | `routes/auth.ts`, `lib/jwt.ts`, `AuthContext.tsx`, `domain/cart.ts` | `auth.test.ts`, `auth.redirect.test.ts`, `middleware.test.ts`, `CartContext.test.tsx`, `apiAuthSync.test.ts`; sin E2E Google real | `fc059ef` |
+| HU15 | Completada | Recuperación y sincronización de carrito/favoritos local y remota | `AuthContext.tsx`, `CartContext.tsx`, `FavoritesContext.tsx`, `routes/sync.ts` | `sync.test.ts`, `apiAuthSync.test.ts`, pruebas de ambos contextos | `fc059ef` |
+| HU16 | Completada | Historial de pedidos y cambio manual de estado | `app/admin/pedidos/page.tsx`, `lib/api/admin.ts`, `routes/admin.ts` | `admin.test.ts`, `apiAdmin.test.ts` | `de69fd9` |
+
+### Observaciones sobre “Done”
+
+- Las **526 pruebas Vitest** (379 frontend y 147 backend), ambos typechecks y ambos builds pasan.
+- Los 22 escenarios Playwright se proyectan a 44 ejecuciones por desktop/mobile; la corrida local
+  auditada terminó con 4 aprobadas, 29 fallidas y 11 omitidas. Una repetición focalizada del
+  catálogo obtuvo 1/8 en verde; por eso HU05 no se declara cerrada sin reserva.
+- HU08 es parcial contra su especificación de acceso: el panel existe, pero usa correo/contraseña y
+  JWT `esAdmin`, no la allowlist Google descrita por RB23/CA12.
+- HU14 conserva estado parcial hasta validar OAuth contra Google en un E2E real.
+- Las metas Lighthouse, axe y SUS del plan QA no tienen evidencia ejecutada en el repositorio.
+
 ---
 _Control de cambios: v1.0 (2026-07-07) — versión inicial._
+
+_v2.0 — Actualización as-built basada en la implementación, pruebas e historial Git._

@@ -14,15 +14,32 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],
-      include: ["src/domain/**"],
-      // types.ts solo contiene declaraciones de tipos (sin código ejecutable).
-      exclude: ["src/domain/types.ts"],
+      /**
+       * Alcance medido (RNF13). Además del dominio se miden los componentes de
+       * UI con comportamiento, los clientes de API y los módulos testeables de
+       * features (contextos, checkout, hooks de catálogo).
+       */
+      include: [
+        "src/domain/**",
+        "src/components/**",
+        "src/lib/**",
+        "src/features/cart/**",
+        "src/features/favorites/**",
+        "src/features/config/**",
+        "src/features/checkout/**",
+        "src/features/catalog/**",
+      ],
+      exclude: [
+        // Solo declaraciones de tipos (sin código ejecutable).
+        "src/domain/types.ts",
+        // Configuración/entorno, sin lógica propia.
+        "src/lib/config.ts",
+      ],
       thresholds: {
-        // RNF13: cobertura de la capa de dominio >= 80%
-        lines: 80,
+        lines: 85,
         functions: 80,
         branches: 75,
-        statements: 80,
+        statements: 85,
       },
     },
   },

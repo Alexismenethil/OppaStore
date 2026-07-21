@@ -39,3 +39,56 @@ describe("catálogo (RB10, RF12, RF13)", () => {
     expect(filtrarProductos(catalogo, { q: "no-existe" })).toEqual([]);
   });
 });
+
+describe("catálogo · entradas vacías y valores límite (RF12, RF13)", () => {
+  it("un catálogo vacío devuelve lista vacía con cualquier filtro", () => {
+    expect(filtrarProductos([])).toEqual([]);
+    expect(filtrarProductos([], { categoria: "skincare", q: "serum" })).toEqual([]);
+  });
+
+  it("una búsqueda vacía o de solo espacios no filtra por nombre", () => {
+    expect(filtrarProductos(catalogo, { q: "" })).toHaveLength(3);
+    expect(filtrarProductos(catalogo, { q: "   " })).toHaveLength(3);
+  });
+
+  it("una categoría vacía se trata como 'todos'", () => {
+    expect(filtrarProductos(catalogo, { categoria: "" })).toHaveLength(3);
+    expect(filtrarProductos(catalogo, { categoria: undefined })).toHaveLength(3);
+  });
+
+  it("una categoría inexistente no devuelve productos", () => {
+    expect(filtrarProductos(catalogo, { categoria: "electronica" })).toEqual([]);
+  });
+
+  it("un solo carácter ya filtra por coincidencia parcial", () => {
+    expect(filtrarProductos(catalogo, { q: "p" }).map((p) => p.id)).toEqual(["2"]);
+    expect(filtrarProductos(catalogo, { q: "s" }).map((p) => p.id)).toEqual(["1", "3"]);
+  });
+
+  it("busca por una subcadena en medio del nombre, no solo por prefijo", () => {
+    expect(filtrarProductos(catalogo, { q: "centella" }).map((p) => p.id)).toEqual(["1"]);
+    expect(filtrarProductos(catalogo, { q: "butter" }).map((p) => p.id)).toEqual(["3"]);
+  });
+
+  it("nunca devuelve inactivos, ni siquiera cuando coinciden con el filtro (RB10)", () => {
+    expect(filtrarProductos(catalogo, { q: "mascarilla" })).toEqual([]);
+    expect(filtrarProductos(catalogo, { categoria: "skincare", q: "vieja" })).toEqual([]);
+  });
+
+  it("combinación incompatible de categoría y búsqueda devuelve lista vacía", () => {
+    // "panda" existe, pero no dentro de skincare.
+    expect(filtrarProductos(catalogo, { categoria: "skincare", q: "panda" })).toEqual([]);
+  });
+
+  it("'todos' + búsqueda filtra solo por nombre", () => {
+    const r = filtrarProductos(catalogo, { categoria: CATEGORIA_TODOS, q: "snack" });
+    expect(r.map((p) => p.id)).toEqual(["3"]);
+  });
+
+  it("no muta ni reordena el catálogo de entrada", () => {
+    const copia = [...catalogo];
+    const r = filtrarProductos(catalogo);
+    expect(catalogo).toEqual(copia);
+    expect(r.map((p) => p.id)).toEqual(["1", "2", "3"]); // conserva el orden original
+  });
+});

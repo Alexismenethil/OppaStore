@@ -29,6 +29,7 @@ sin historia, sin criterio y sin prueba.
 | 09 | [Matriz de trazabilidad](09-matriz-de-trazabilidad.md) | RF ↔ HU ↔ RB ↔ CA ↔ CP |
 | 10 | [Plan de pruebas / QA](10-plan-de-pruebas-qa.md) | Estrategia, herramientas, ISO/IEC 25010, SUS |
 | 11 | [Backlog y sprints](11-backlog-y-sprints.md) | Product backlog y planificación por sprints |
+| 12 | [Especificación as-built y tareas](12-especificacion-as-built-y-tareas.md) | Reconstrucción retrospectiva de módulos, tareas, código, tecnologías y pruebas realmente implementados |
 
 ## Convención de identificadores
 
@@ -51,4 +52,18 @@ sin historia, sin criterio y sin prueba.
 
 ## Estado
 
-Fase actual: **Especificación** (previa a la implementación). Ver control de cambios al pie de cada documento.
+Fase actual: **MVP implementado y validado mediante pruebas automatizadas unitarias, de componente
+e integración**; la suite E2E conserva incidencias documentadas en los documentos 10 y 12. La fase histórica
+inicial fue de **especificación previa a la implementación**; ese estado no se elimina ni se
+reescribe. Los documentos originales se conservan como línea base y se complementan
+retrospectivamente con información **as-built** obtenida del código, dependencias, pruebas e
+historial Git.
+
+La reconstrucción detallada está en
+[12-especificacion-as-built-y-tareas.md](12-especificacion-as-built-y-tareas.md). OpenSpec se
+incorporó después del MVP para gestionar cambios nuevos —la primera evidencia versionada es el
+cambio del titular de tendencias de Home—, por lo que no se atribuye a OpenSpec la construcción
+original de todos los módulos.
+
+---
+_Control de cambios: v2.0 — Actualización as-built basada en la implementación, pruebas e historial Git._
